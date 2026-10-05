@@ -403,12 +403,16 @@ export default function Home() {
   };
 
   const handleWhatsAppContact = () => {
-    const text = encodeURIComponent(
-      `Hello Vasista Team,\n` +
-      `• Name: ${contactName || "Client"}\n` +
-      `• Email: ${contactEmail || "Not provided"}\n` +
-      `• Inquiry: ${contactMessage || "I would like to inquire about your trading services and commodities."}`
-    );
+    let message = "Hello Vasista Team, I am interested in your trading services and commodities. Please share your catalog and quotation details.";
+    if (contactMessage.trim()) {
+      message = `Hello Vasista Team, ${contactMessage.trim()}`;
+      if (contactName.trim()) {
+        message += ` - ${contactName.trim()}`;
+      }
+    } else if (contactName.trim()) {
+      message = `Hello Vasista Team, my name is ${contactName.trim()}. I am interested in your trading services and commodities. Please share further details.`;
+    }
+    const text = encodeURIComponent(message);
     window.open(`https://wa.me/918591938908?text=${text}`, "_blank");
   };
 
@@ -451,7 +455,7 @@ export default function Home() {
               <a href="https://linkedin.com/company/vasista-trading-services-private-limited" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors" title="LinkedIn">
                 <FaLinkedinIn className="w-3 h-3" />
               </a>
-              <a href="https://wa.me/918591938908" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors" title="WhatsApp">
+              <a href="https://wa.me/918591938908?text=Hello%20Vasista%20Team%2C%20I%20am%20interested%20in%20your%20trading%20services%20and%20commodities.%20Please%20share%20further%20details." target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors" title="WhatsApp">
                 <SiWhatsapp className="w-3 h-3" />
               </a>
             </div>
@@ -1473,7 +1477,7 @@ export default function Home() {
                 <a href="https://linkedin.com/company/vasista-trading-services-private-limited" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors" title="LinkedIn">
                   <FaLinkedinIn className="w-3.5 h-3.5" />
                 </a>
-                <a href="https://wa.me/918591938908" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors" title="WhatsApp">
+                <a href="https://wa.me/918591938908?text=Hello%20Vasista%20Team%2C%20I%20am%20interested%20in%20your%20trading%20services%20and%20commodities.%20Please%20share%20further%20details." target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors" title="WhatsApp">
                   <SiWhatsapp className="w-3.5 h-3.5" />
                 </a>
               </div>
