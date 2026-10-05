@@ -1,0 +1,285 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  BUYER
+  SELLER
+  ADMIN
+  LOGISTICS_COORDINATOR
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  SUSPENDED
+}
+
+enum ProductCategory {
+  MINERALS_METALS
+  ENERGY_CARBON
+  CHEMICALS_INPUTS
+  FOOD_AGRI
+}
+
+enum Incoterm {
+  CIF  // Cost, Insurance, and Freight
+  FOB  // Free on Board
+  CFR  // Cost and Freight
+  EXW  // Ex Works
+  DAP  // Delivered at Place
+  DDP  // Delivered Duty Paid
+}
+
+enum ShipmentStatus {
+  BOOKING_CONFIRMED
+  RAKE_INDENTED
+  ORIGIN_PORT_STAGED
+  LAB_INSPECTION_PASSED
+  CUSTOMS_EXPORT_CLEARED
+  VESSEL_LOADED
+  ON_HIGH_SEAS
+  TRANSSHIPMENT_HUB
+  CUSTOMS_IMPORT_CLEARED
+  DESTINATION_DISCHARGED
+  IN_LAND_TRANSIT
+  DELIVERED_TO_PLANT
+  EXCEPTION_HOLD
+}
+
+enum RfqStatus {
+  SUBMITTED
+  DESK_REVIEW
+  SUPPLIER_MATCHING
+  COMMERCIAL_OFFER_ISSUED
+  CONTRACT_SIGNED
+  CLOSED
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String
+  phone         String?
+  role          Role      @default(BUYER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sellerProfile Seller?
+  rfqs          QuoteRequest[]
+  auditLogs     ShipmentAuditLog[]
+
+  @@index([email])
+}
+
+model Seller {
+  id                 String             @id @default(uuid())
+  userId             String             @unique
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName        String
+  tradeName          String?
+  taxId              String             // GSTIN or Tax Identification Number
+  cin                String?            // Corporate Identification Number
+  registeredAddress  String
+  city               String
+  country            String             @default("India")
+  website            String?
+  verificationStatus VerificationStatus @default(PENDING)
+  complianceScore    Float              @default(100.0)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  products           Product[]
+  originShipments    Shipment[]
+
+  @@index([taxId])
+  @@index([verificationStatus])
+}
+
+model Port {
+  id           String     @id @default(uuid())
+  code         String     @unique // UN/LOCODE (e.g. INVTZ, INNSA, SGSIN, NLRTM)
+  name         String     // Port of Visakhapatnam, JNPT Mumbai, etc.
+  country      String     // e.g. India
+  countryCode  String     // ISO 2-letter (e.g. IN)
+  city         String
+  latitude     Float?
+  longitude    Float?
+  isGateway    Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  originShipments      Shipment[]     @relation("OriginPort")
+  destinationShipments Shipment[]     @relation("DestinationPort")
+  rfqs                 QuoteRequest[] @relation("DestinationPortRfq")
+
+  @@index([code])
+  @@index([countryCode])
+}
+
+model Product {
+  id              String          @id @default(uuid())
+  slug            String          @unique
+  name            String
+  category        ProductCategory
+  hsCode          String          // Harmonized System Tariff Code (e.g. 2521.00)
+  originCountry   String          // Primary country of origin
+  moq             Float           // Minimum Order Quantity
+  moqUnit         String          @default("MT") // Metric Tons, FCL, etc.
+  leadTimeDays    Int             @default(7)
+  
+  // Technical Specifications & Chemical Assays
+  shortDesc       String
+  chemicalAssay   Json?           // Structured assay { caco3: "95%", sio2: "< 3%" }
+  physicalSpecs   String?         // Sieve/size tolerances (e.g. 10-40mm)
+  standardGrades  String[]        // SMS, Blast Furnace, Kiln Feed, etc.
+  packagingTypes  String[]        // Bulk vessel, Rake loads, Jumbo bags
+  isFeatured      Boolean         @default(false)
+  isActive        Boolean         @default(true)
+
+  sellerId        String
+  seller          Seller          @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+
+  shipmentItems   ShipmentItem[]
+  rfqItems        QuoteRequest[]
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([hsCode])
+  @@index([category])
+  @@index([sellerId])
+}
+
+model Shipment {
+  id               String         @id @default(uuid())
+  trackingNumber   String         @unique // e.g. VAS-IN-849201
+  containerNumber  String?        // e.g. MEDU8492015 or Bulk Vessel Name
+  billOfLading     String?        @unique // Ocean Bill of Lading (B/L)
+  carrierName      String         // e.g. Maersk, MSC, Indian Railways
+  vesselName       String?
+  voyageNumber     String?
+
+  status           ShipmentStatus @default(BOOKING_CONFIRMED)
+  totalWeightMT    Float
+  totalVolumeCBM   Float?
+  incoterm         Incoterm       @default(CIF)
+
+  sellerId         String
+  seller           Seller         @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+
+  originPortId     String
+  originPort       Port           @relation("OriginPort", fields: [originPortId], references: [id], onDelete: Restrict)
+
+  destinationPortId String
+  destinationPort  Port           @relation("DestinationPort", fields: [destinationPortId], references: [id], onDelete: Restrict)
+
+  etd              DateTime?      // Estimated Time of Departure
+  atd              DateTime?      // Actual Time of Departure
+  eta              DateTime?      // Estimated Time of Arrival
+  ata              DateTime?      // Actual Time of Arrival
+
+  items            ShipmentItem[]
+  trackingSteps    TrackingStep[]
+  auditLogs        ShipmentAuditLog[]
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([trackingNumber])
+  @@index([containerNumber])
+  @@index([status])
+  @@index([destinationPortId])
+}
+
+model ShipmentItem {
+  id          String   @id @default(uuid())
+  shipmentId  String
+  shipment    Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+  quantityMT  Float
+  grade       String?
+
+  @@index([shipmentId])
+  @@index([productId])
+}
+
+model TrackingStep {
+  id           String         @id @default(uuid())
+  shipmentId   String
+  shipment     Shipment       @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  
+  stepCode     String         // e.g. STEP_ORIGIN_STAGED, STEP_VESSEL_LOADED
+  title        String
+  description  String?
+  location     String         // e.g. "Visakhapatnam Berth 4"
+  status       ShipmentStatus
+  orderIndex   Int
+  isCompleted  Boolean        @default(false)
+  isCurrent    Boolean        @default(false)
+  completedAt  DateTime?
+
+  // Extensibility metadata payload (custom milestones, lab certificates, rake indent IDs)
+  metadata     Json?
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([shipmentId, orderIndex])
+  @@index([stepCode])
+}
+
+model QuoteRequest {
+  id                String    @id @default(uuid())
+  rfqNumber         String    @unique // e.g. RFQ-2026-9021
+  buyerName         String
+  companyName       String
+  email             String
+  phone             String
+  buyerType         String    @default("BUYER") // BUYER or SUPPLIER
+
+  productId         String?
+  product           Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  commodityName     String    // Declared commodity name
+  hsCode            String?   // Declared or looked up HS Code
+  
+  requestedQuantity Float
+  unit              String    @default("MT")
+  targetIncoterm    Incoterm  @default(CIF)
+  
+  destinationPortId String?
+  destinationPort   Port?     @relation("DestinationPortRfq", fields: [destinationPortId], references: [id], onDelete: SetNull)
+  destinationCustom String?   // Freeform destination port/plant if unlisted
+
+  requiredSpecs     String?   // Chemical purity, moisture, size specs
+  status            RfqStatus @default(SUBMITTED)
+  userId            String?
+  user              User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([rfqNumber])
+  @@index([status])
+  @@index([email])
+}
+
+model ShipmentAuditLog {
+  id         String   @id @default(uuid())
+  shipmentId String
+  shipment   Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String   // e.g. "STATUS_TRANSITION_VESSEL_LOADED"
+  details    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([shipmentId])
+}
