@@ -4,16 +4,16 @@ import { FaLinkedinIn } from "react-icons/fa";
 import {
   Mail, Phone, MapPin, Globe, ArrowRight,
   Award, Truck, Package, Search, CheckCircle2,
-  Clock, Ship, ChevronRight, Menu, X, Eye, Target, Shield, Compass
+  Clock, Ship, ChevronRight, Menu, X, Eye, Target, Shield,
+  Layers, Flame, Sparkles, Coffee, Factory, Gem, Droplets, Leaf
 } from "lucide-react";
 
 import veEmblem from "@assets/ve-emblem.png";
-import heroOceanVessel from "@assets/hero-ocean-vessel.jpg";
-import heroPortTerminal from "@assets/hero-port-terminal.jpg";
-import heroCargoFreight from "@assets/hero-cargo-freight.jpg";
-import aboutVessel from "@assets/about-maritime-vessel.jpg";
-import corporateCardImg from "@assets/vasista_corporate_card.png";
-import commoditiesMatrixImg from "@assets/vasista_commodities_matrix.png";
+import heroContainerShip from "@assets/hero-container-ship.jpg";
+import heroLogisticsPort from "@assets/hero-logistics-port.jpg";
+import heroBulkMineral from "@assets/hero-bulk-mineral.jpg";
+import aboutTradingPort from "@assets/about-trading-port.jpg";
+import aboutBulkCarrier from "@assets/about-bulk-carrier.jpg";
 import offeringMinerals from "@assets/offering-minerals.jpg";
 import offeringEnergy from "@assets/offering-energy.jpg";
 import offeringChemicals from "@assets/offering-chemicals.jpg";
@@ -46,6 +46,35 @@ function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
 
   return <span ref={ref}>{count}{suffix}</span>;
 }
+
+// ── 16 Official Commodities from Company Matrix ──────────────────────────────
+const COMPANY_COMMODITIES = [
+  { no: "01", name: "Sulphur", cat: "Industrial Chemical", icon: Droplets, hs: "HS 2503.00", grade: "Purity 99.5% min" },
+  { no: "02", name: "Urea", cat: "Fertilizer Input", icon: Package, hs: "HS 3102.10", grade: "Prilled & Technical (46% N)" },
+  { no: "03", name: "Manganese", cat: "Metal Ore", icon: Layers, hs: "HS 2602.00", grade: "Mn: 38%–46% Basis" },
+  { no: "04", name: "Pet Coke", cat: "Carbon Material", icon: Flame, hs: "HS 2713.11", grade: "Green Delayed / GPC" },
+  { no: "05", name: "Met Coke", cat: "Carbon Fuel", icon: Factory, hs: "HS 2704.00", grade: "Low Ash Metallurgical" },
+  { no: "06", name: "Iron Ore", cat: "Metal Ore", icon: Layers, hs: "HS 2601.11", grade: "Fe: 58%–64.5% Fines & Lumps" },
+  { no: "07", name: "Limestone", cat: "Flux Stone", icon: Layers, hs: "HS 2521.00", grade: "SMS & BF Grade (CaCO₃ 95%)" },
+  { no: "08", name: "Thermal Coal", cat: "Solid Fuel", icon: Flame, hs: "HS 2701.12", grade: "GAR 3800–5000 kcal/kg" },
+  { no: "09", name: "Steel Scrap", cat: "Recycled Metal", icon: Factory, hs: "HS 7204.49", grade: "ISRI HMS 1/2 (80:20)" },
+  { no: "10", name: "Dry Fruits", cat: "Agricultural", icon: Leaf, hs: "HS 0801.32", grade: "Export Cashews W180–W320" },
+  { no: "11", name: "Mushrooms", cat: "Agricultural", icon: Leaf, hs: "HS 0709.51", grade: "Processed & Dehydrated" },
+  { no: "12", name: "Araku Coffee", cat: "Specialty Agro", icon: Coffee, hs: "HS 0901.11", grade: "Premium Arabica Beans" },
+  { no: "13", name: "Whole Spices", cat: "Agro Commodity", icon: Leaf, hs: "HS 0910.30", grade: "Guntur Chilli & Turmeric" },
+  { no: "14", name: "Pesticides", cat: "Agricultural Chemical", icon: Droplets, hs: "HS 3808.91", grade: "Agro Protection Grade" },
+  { no: "15", name: "Rare Earth", cat: "Specialty Elements", icon: Gem, hs: "HS 2805.30", grade: "Industrial Extraction Basis" },
+  { no: "16", name: "Precious Metals", cat: "Metallurgy", icon: Sparkles, hs: "HS 7108.12", grade: "Refined Commercial Purity" },
+];
+
+const OPERATIONAL_STATES = [
+  { name: "Andhra Pradesh", role: "Registered Corporate HQ & Visakhapatnam Deepwater Port" },
+  { name: "Maharashtra", role: "Navi Mumbai Commercial Desk & JNPT Nhava Sheva Terminal" },
+  { name: "Gujarat", role: "Mundra & Kandla Port Import Corridors" },
+  { name: "Odisha", role: "Paradip Port & Eastern Mineral Supply Hub" },
+  { name: "Telangana", role: "Industrial Plant Logistics & Supply Network" },
+  { name: "Karnataka", role: "Mineral Mining & Agro Commodity Consolidation" },
+];
 
 // ── B2B Products Catalog with HS Codes, Origin Country, and MOQs ──────────────
 const B2B_PRODUCTS = [
@@ -317,19 +346,19 @@ export default function Home() {
 
   const heroSlides = [
     {
-      img: heroOceanVessel,
+      img: heroContainerShip,
       subtitle: "GLOBAL COMMODITY SUPPLY CHAINS",
       title: "Trade Everything With Passion",
       desc: "Delivering reliable international commodity supply chains, verified SGS lab assays, and multimodal freight solutions with 13+ years of group experience."
     },
     {
-      img: heroPortTerminal,
-      subtitle: "GLOBAL LOGISTICS & PRECISION SOURCING",
+      img: heroLogisticsPort,
+      subtitle: "PORT LOGISTICS & PRECISION SOURCING",
       title: "Empowering Industries Worldwide",
       desc: "Direct allocation of high-purity minerals, thermal coals, pet coke, and agricultural staples connecting international ports to industrial plants."
     },
     {
-      img: heroCargoFreight,
+      img: heroBulkMineral,
       subtitle: "VERIFIED QUALITY · ZERO DEVIATION",
       title: "Built On Trust, Quality & Commitment",
       desc: "Rigorous third-party sampling by SGS and Bureau Veritas, standardized Incoterms 2020, and dedicated trade desk execution."
@@ -466,7 +495,7 @@ export default function Home() {
           <div className="hidden lg:flex items-center gap-8 font-bold text-[13px] tracking-wider uppercase text-[#13223C]">
             <a href="#" className="hover:text-[#FC811B] transition-colors py-2">HOME</a>
             <a href="#about" className="hover:text-[#FC811B] transition-colors py-2">ABOUT US</a>
-            <a href="#portfolio" className="hover:text-[#FC811B] transition-colors py-2">NETWORK</a>
+            <a href="#portfolio" className="hover:text-[#FC811B] transition-colors py-2">TRADING MATRIX</a>
             <a href="#services" className="hover:text-[#FC811B] transition-colors py-2">OUR SERVICES</a>
             <a href="#catalog" className="hover:text-[#FC811B] transition-colors py-2">B2B CATALOG</a>
             <a href="#tracking" className="hover:text-[#FC811B] transition-colors py-2">FREIGHT TRACKING</a>
@@ -502,7 +531,7 @@ export default function Home() {
           <div className="lg:hidden bg-[#13223C] text-white border-t border-white/10 px-6 py-6 space-y-4">
             <a href="#" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase text-[#FBD903]">HOME</a>
             <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">ABOUT US</a>
-            <a href="#portfolio" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">NETWORK</a>
+            <a href="#portfolio" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">TRADING MATRIX</a>
             <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">OUR SERVICES</a>
             <a href="#catalog" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">B2B CATALOG</a>
             <a href="#tracking" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">FREIGHT TRACKING</a>
@@ -600,40 +629,47 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 4. ABOUT COMPANY SECTION ──────────────────────────────────────── */}
+      {/* ── 4. ABOUT COMPANY SECTION (Pure Custom Photography, Zero Screenshots) ─ */}
       <section id="about" className="py-24 bg-white relative overflow-hidden">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-            {/* Left Column: Official Corporate Presentation & Overlaid Card */}
+            {/* Left Column: Overlapping Custom Maritime & Industrial Photography */}
             <div className="lg:col-span-6 relative">
               <div className="relative mx-auto max-w-[500px]">
-                <div className="relative z-10 overflow-hidden shadow-2xl border-4 border-white">
+                {/* Primary Photo: Modern Commercial Deepwater Port Terminal */}
+                <div className="relative z-10 overflow-hidden shadow-2xl border-4 border-white bg-slate-100">
                   <img
-                    src={aboutVessel}
-                    alt="Vasista Maritime Shipping Logistics"
-                    className="w-full h-[480px] object-cover object-center"
+                    src={aboutTradingPort}
+                    alt="Vasista Deepwater Commercial Shipping Port"
+                    className="w-full h-[460px] object-cover object-center transition-transform hover:scale-105 duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#101C30]/85 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6 text-white">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#101C30]/85 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-5 left-5 right-5 text-white">
                     <div className="text-[11px] font-black uppercase tracking-widest text-[#FBD903] mb-1">
-                      MARITIME BULK & CONTAINER CORRIDORS
+                      INTERNATIONAL GATEWAY TERMINALS
                     </div>
                     <div className="text-xs font-medium text-gray-200">
-                      Connecting Bay of Bengal, Arabian Sea & International Ports
+                      Stevedoring & Multimodal Maritime Corridors
                     </div>
                   </div>
                 </div>
 
-                {/* Overlaid Official Corporate Credential Card */}
-                <div className="absolute -bottom-10 -right-4 sm:-right-8 z-20 w-60 sm:w-68 shadow-2xl">
+                {/* Overlapping Secondary Photo: Bulk Carrier Vessel Navigating Ocean */}
+                <div className="absolute -bottom-8 -right-4 sm:-right-8 z-20 w-64 sm:w-72 shadow-2xl border-[6px] border-white overflow-hidden bg-slate-900">
                   <img
-                    src={corporateCardImg}
-                    alt="Vasista Trading Services Corporate Certificate"
-                    className="w-full h-auto object-cover border-[6px] border-white shadow-2xl"
+                    src={aboutBulkCarrier}
+                    alt="Bulk Carrier Vessel transporting raw minerals and commodities"
+                    className="w-full h-44 sm:h-48 object-cover transition-transform hover:scale-105 duration-700"
                   />
+                  <div className="bg-[#13223C] text-white p-2.5 text-center">
+                    <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#FBD903]">
+                      OCEAN BULK CARGO TRANSIT
+                    </div>
+                  </div>
                 </div>
 
+                {/* 13+ Years Experience Badge */}
                 <div className="absolute top-6 left-6 z-30 bg-[#FBD903] text-[#13223C] p-4 text-center shadow-lg border-2 border-white">
                   <div className="font-heading text-3xl font-extrabold leading-none">13+</div>
                   <div className="text-[10px] font-black uppercase tracking-wider mt-0.5">Years Experience</div>
@@ -770,7 +806,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 6. OFFICIAL COMMODITIES MATRIX & OPERATIONAL FOOTPRINT ────────── */}
+      {/* ── 6. OFFICIAL 16 COMMODITIES MATRIX & LOGISTICS FOOTPRINT ────────── */}
       <section id="portfolio" className="py-24 bg-[#101C30] text-white relative overflow-hidden">
         <div className="max-w-[1290px] mx-auto px-6 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
@@ -780,20 +816,77 @@ export default function Home() {
               <span className="w-8 h-0.5 bg-[#FBD903]" />
             </div>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
-              Our Comprehensive Global Trade Matrix
+              Our 16 Core Trading Commodities
             </h2>
             <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
-              Officially chartered commodity matrix covering 16 critical trade categories across key operational states: Andhra Pradesh, Maharashtra, Gujarat, Odisha, Telangana, and Karnataka.
+              Officially chartered trading matrix connecting major producers and deepwater sea terminals across India and international corridors.
             </p>
           </div>
 
-          {/* High-Resolution Commodities Matrix Graphic */}
-          <div className="bg-[#13223C] border border-white/15 p-4 sm:p-8 shadow-2xl">
-            <img
-              src={commoditiesMatrixImg}
-              alt="Vasista Trading Services Commodities Matrix and Operational States"
-              className="w-full h-auto object-contain mx-auto shadow-xl"
-            />
+          {/* Interactive 16 Commodities Grid (Native Component, Zero Static Screenshot) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {COMPANY_COMMODITIES.map((c) => {
+              const IconComp = c.icon;
+              return (
+                <div
+                  key={c.no}
+                  onClick={() => prefillInquiry(`${c.name} (${c.hs})`)}
+                  className="bg-[#13223C] hover:bg-[#1C3259] border border-white/10 hover:border-[#FBD903] p-5 transition-all duration-300 group cursor-pointer flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="font-mono text-xs font-bold text-[#FBD903] bg-white/5 px-2 py-0.5">
+                        {c.no}
+                      </span>
+                      <IconComp className="w-5 h-5 text-gray-400 group-hover:text-[#FBD903] transition-colors" />
+                    </div>
+                    <div className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
+                      {c.cat}
+                    </div>
+                    <h3 className="font-heading text-base font-extrabold text-white mt-1 group-hover:text-[#FBD903] transition-colors">
+                      {c.name}
+                    </h3>
+                  </div>
+
+                  <div className="pt-3 mt-3 border-t border-white/10 flex items-center justify-between text-[11px]">
+                    <span className="font-mono text-gray-300">{c.hs}</span>
+                    <span className="text-[#FBD903] font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">
+                      Quote →
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Operational States Corridor Matrix */}
+          <div className="mt-12 bg-[#13223C] border border-white/10 p-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-white/10">
+              <div>
+                <div className="text-xs uppercase font-extrabold text-[#FBD903] tracking-wider mb-1">
+                  STRATEGIC OPERATIONAL CORRIDORS
+                </div>
+                <div className="font-heading text-xl font-extrabold text-white">
+                  Active Indian Seaports & Industrial Siding Corridors
+                </div>
+              </div>
+              <div className="flex items-center gap-3 text-xs font-mono text-gray-300 bg-white/5 px-4 py-2 border border-white/10">
+                <Shield className="w-4 h-4 text-[#FBD903]" />
+                <span>GSTIN: <strong className="text-white">37AALCV9169R1ZY</strong></span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {OPERATIONAL_STATES.map((s, idx) => (
+                <div key={idx} className="bg-white/5 p-4 border border-white/5 hover:border-[#FBD903]/40 transition-colors">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <MapPin className="w-4 h-4 text-[#FC811B]" />
+                    <span className="font-heading font-bold text-sm text-white">{s.name}</span>
+                  </div>
+                  <p className="text-xs text-gray-400 leading-relaxed">{s.role}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Quick Matrix Action Bar */}
@@ -803,8 +896,8 @@ export default function Home() {
                 <Shield className="w-5 h-5" />
               </div>
               <div>
-                <div className="font-bold text-white text-sm">Verified Corporate Trading House</div>
-                <div>GSTIN: <span className="font-mono text-[#FBD903]">37AALCV9169R1ZY</span> · All shipments backed by third-party inspection (SGS/BV).</div>
+                <div className="font-bold text-white text-sm">Verified Corporate Supply Network</div>
+                <div>All shipments assayed by SGS / Bureau Veritas prior to vessel loading and container seal.</div>
               </div>
             </div>
 
@@ -819,7 +912,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 7. "WHAT WE’RE OFFERING" (Services Grid) ───────────────────────── */}
+      {/* ── 7. "WHAT WE’RE OFFERING" (Services Grid with Fresh Custom Photos) ─ */}
       <section id="services" className="py-24 bg-white relative">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -840,7 +933,7 @@ export default function Home() {
                 className="bg-[#EFF1F5] group overflow-hidden border border-[#DFE3EA] hover:border-[#FBD903] transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative h-56 overflow-hidden">
+                  <div className="relative h-56 overflow-hidden bg-slate-200">
                     <img
                       src={item.image}
                       alt={item.title}
@@ -1295,7 +1388,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 12. BLOG POSTS / INSIGHTS ─────────────────────────────────────── */}
+      {/* ── 12. BLOG POSTS / INSIGHTS (Fresh Custom Lab & Maritime Photos) ─── */}
       <section id="news" className="py-24 bg-[#EFF1F5]">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -1313,7 +1406,7 @@ export default function Home() {
             {articles.map((item, idx) => (
               <div key={idx} className="bg-white border border-[#DFE3EA] overflow-hidden group shadow-sm flex flex-col justify-between">
                 <div>
-                  <div className="relative h-56 overflow-hidden">
+                  <div className="relative h-56 overflow-hidden bg-slate-200">
                     <img
                       src={item.image}
                       alt={item.title}
@@ -1394,7 +1487,7 @@ export default function Home() {
               <ul className="space-y-3 text-xs uppercase tracking-wider font-bold">
                 <li><a href="#" className="hover:text-[#FBD903] transition-colors">Home</a></li>
                 <li><a href="#about" className="hover:text-[#FBD903] transition-colors">About Us</a></li>
-                <li><a href="#portfolio" className="hover:text-[#FBD903] transition-colors">Trading Network</a></li>
+                <li><a href="#portfolio" className="hover:text-[#FBD903] transition-colors">Trading Matrix</a></li>
                 <li><a href="#services" className="hover:text-[#FBD903] transition-colors">Our Services</a></li>
                 <li><a href="#catalog" className="hover:text-[#FBD903] transition-colors">B2B Product Matrix</a></li>
                 <li><a href="#tracking" className="hover:text-[#FBD903] transition-colors">Freight Tracking</a></li>
