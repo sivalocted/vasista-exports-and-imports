@@ -1,148 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { SiFacebook, SiInstagram } from "react-icons/si";
+import { SiFacebook, SiInstagram, SiWhatsapp } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa";
 import {
   Mail, Phone, MapPin, Globe, ArrowRight,
   TrendingUp, ShieldCheck, Shield, Zap, Award,
-  Truck, Users, Package, Search, FileText, CheckCircle2,
-  Clock, Compass, Anchor, Ship, FileCheck, Layers
+  Truck, Users, Package, Search, CheckCircle2,
+  Clock, Compass, Anchor, Ship, ChevronRight,
+  Menu, X, Eye, Target, Play, ChevronLeft
 } from "lucide-react";
-import logoImg from "@assets/IMG_9740_1777699336524.jpg";
 
-// ── SVG Globe with animated trade routes (no WebGL required) ─────────────────
+import logoImg from "@assets/vasista-eng-logo.png";
+import about2Img from "@assets/about-2.png";
+import about3Img from "@assets/about-3.png";
+import slider1Img from "@assets/slider-1.png";
+import slider3Img from "@assets/slider-3.png";
+import slider4Img from "@assets/slider-4.png";
 
-const TRADE_ROUTES = [
-  // [x1,y1, cx,cy, x2,y2, label, duration, delay]
-  [260, 195, 310, 120, 370, 155, "Mumbai → Shanghai",   8,  0],
-  [260, 195, 285, 230, 310, 240, "Mumbai → Singapore",  7,  1],
-  [260, 195, 240, 150, 220, 170, "Mumbai → Dubai",      6,  2],
-  [260, 195, 210,  80, 150, 100, "Mumbai → London",    10,  0.5],
-  [260, 195, 185,  90, 100, 160, "Mumbai → New York",  12,  1.5],
-  [260, 195, 340, 120, 415, 140, "Mumbai → Tokyo",      9,  2.5],
-  [220, 170, 185,  90, 150, 100, "Dubai → London",      8,  3],
-  [370, 155, 415, 100, 415, 140, "Shanghai → Tokyo",    6,  1],
-];
-
-const HUBS = [
-  { x: 260, y: 195, label: "Mumbai (HQ)", gold: true },
-  { x: 370, y: 155, label: "Shanghai", gold: false },
-  { x: 310, y: 240, label: "Singapore", gold: false },
-  { x: 220, y: 170, label: "Dubai", gold: false },
-  { x: 150, y: 100, label: "London", gold: false },
-  { x: 100, y: 160, label: "New York", gold: false },
-  { x: 415, y: 140, label: "Tokyo", gold: false },
-  { x: 450, y: 255, label: "Sydney", gold: false },
-  { x: 175, y:  85, label: "Rotterdam", gold: false },
-];
-
-function GlobeCanvas() {
-  return (
-    <div className="relative w-full h-full flex items-center justify-center select-none">
-      {/* Rotating rings – CSS 3D globe illusion */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        {[0, 30, 60, 90, 120, 150].map((deg, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full border border-blue-500/20"
-            style={{
-              width: `${220 + i * 14}px`,
-              height: `${220 + i * 14}px`,
-              transform: `rotateX(75deg) rotateZ(${deg}deg)`,
-              animation: `spin ${18 + i * 4}s linear infinite`,
-            }}
-          />
-        ))}
-        {/* Solid globe core */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: 220, height: 220,
-            background: "radial-gradient(circle at 38% 35%, #1a3a9f 0%, #0a1a6e 50%, #040d24 100%)",
-            boxShadow: "0 0 60px 10px rgba(30,79,216,0.25), inset 0 0 40px rgba(0,0,0,0.5)",
-          }}
-        />
-        {/* Atmosphere glow */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: 240, height: 240,
-            background: "radial-gradient(circle, transparent 45%, rgba(30,79,216,0.15) 70%, transparent 100%)",
-          }}
-        />
-      </div>
-
-      {/* SVG trade routes overlay */}
-      <svg
-        viewBox="0 0 520 400"
-        className="absolute inset-0 w-full h-full"
-        style={{ filter: "drop-shadow(0 0 6px rgba(30,79,216,0.4))" }}
-      >
-        <defs>
-          <radialGradient id="goldDot">
-            <stop offset="0%" stopColor="#f0c040" />
-            <stop offset="100%" stopColor="#d4a017" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="blueDot">
-            <stop offset="0%" stopColor="#60a5fa" />
-            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-
-        {/* Draw route arcs */}
-        {TRADE_ROUTES.map(([x1, y1, cx, cy, x2, y2, , dur, delay], i) => (
-          <g key={i}>
-            <path
-              d={`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`}
-              fill="none"
-              stroke="rgba(96,165,250,0.35)"
-              strokeWidth="1.2"
-              strokeDasharray="5 4"
-            />
-            <circle r="3.5" fill="#f0c040" opacity="0.9">
-              <animateMotion
-                dur={`${dur}s`}
-                begin={`${delay}s`}
-                repeatCount="indefinite"
-                path={`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`}
-              />
-            </circle>
-          </g>
-        ))}
-
-        {/* Hub dots */}
-        {HUBS.map((hub, i) => (
-          <g key={i}>
-            <circle cx={hub.x} cy={hub.y} r="9" fill="none"
-              stroke={hub.gold ? "rgba(240,192,64,0.4)" : "rgba(96,165,250,0.3)"}
-              strokeWidth="1">
-              <animate attributeName="r" values="6;12;6" dur="3s"
-                begin={`${i * 0.4}s`} repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.7;0;0.7" dur="3s"
-                begin={`${i * 0.4}s`} repeatCount="indefinite" />
-            </circle>
-            <circle cx={hub.x} cy={hub.y} r="4.5"
-              fill={hub.gold ? "#f0c040" : "#60a5fa"}
-              style={{ filter: `drop-shadow(0 0 4px ${hub.gold ? "#f0c040" : "#60a5fa"})` }}
-            />
-            <text
-              x={hub.x + (hub.x > 260 ? 8 : -8)} y={hub.y - 7}
-              fontSize="8" fill={hub.gold ? "#f0c040" : "rgba(190,220,255,0.7)"}
-              textAnchor={hub.x > 260 ? "start" : "end"}
-              fontFamily="monospace"
-            >{hub.label}</text>
-          </g>
-        ))}
-      </svg>
-
-      <style>{`
-        @keyframes spin { from { transform: rotateX(75deg) rotateZ(var(--r, 0deg)); } to { transform: rotateX(75deg) rotateZ(calc(var(--r, 0deg) + 360deg)); } }
-      `}</style>
-    </div>
-  );
-}
-
-// ── Animated Counter ─────────────────────────────────────────────────────────
+// ── Animated Counter Component ───────────────────────────────────────────────
 function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
@@ -151,12 +26,16 @@ function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
   useEffect(() => {
     if (!inView) return;
     let start = 0;
-    const step = Math.ceil(target / 60);
+    const step = Math.ceil(target / 50) || 1;
     const interval = setInterval(() => {
       start += step;
-      if (start >= target) { setCount(target); clearInterval(interval); }
-      else setCount(start);
-    }, 20);
+      if (start >= target) {
+        setCount(target);
+        clearInterval(interval);
+      } else {
+        setCount(start);
+      }
+    }, 25);
     return () => clearInterval(interval);
   }, [inView, target]);
 
@@ -263,7 +142,7 @@ const B2B_PRODUCTS = [
   }
 ];
 
-// ── Live Freight & Container Tracking Data Skeleton ─────────────────────────
+// ── Live Freight Tracking Milestone Data ──────────────────────────────────────
 interface TrackingMilestone {
   step: string;
   date: string;
@@ -298,7 +177,7 @@ const SAMPLE_SHIPMENTS: Record<string, ShipmentData> = {
     originPort: "Visakhapatnam Port (INVTZ)",
     destPort: "Port of Singapore (SGSIN)",
     status: "On High Seas · Maritime Transit",
-    statusColor: "text-amber-400 bg-amber-400/10 border-amber-400/30",
+    statusColor: "text-amber-800 bg-amber-100 border-amber-300",
     eta: "18 Oct 2026",
     milestones: [
       { step: "Booking & Commercial Indent Confirmed", date: "28 Sep 2026", location: "Visakhapatnam Desk", status: "completed", desc: "Contract signed, LC verified, and container allocation booked." },
@@ -318,7 +197,7 @@ const SAMPLE_SHIPMENTS: Record<string, ShipmentData> = {
     originPort: "Port of Tanjung Priok, Jakarta (IDJKT)",
     destPort: "Mundra Port, Gujarat (INMUN)",
     status: "Customs Cleared · Discharge Ready",
-    statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/30",
+    statusColor: "text-emerald-800 bg-emerald-100 border-emerald-300",
     eta: "04 Oct 2026 (Arrived)",
     milestones: [
       { step: "Vessel Booking & Loading", date: "24 Sep 2026", location: "Jakarta Siding", status: "completed", desc: "Draft survey completed and hold sealing executed." },
@@ -338,7 +217,7 @@ const SAMPLE_SHIPMENTS: Record<string, ShipmentData> = {
     originPort: "Gangavaram Port (INGGV)",
     destPort: "JNPT Mumbai / Nhava Sheva (INNSA)",
     status: "Origin Berth Staged · Lab Audited",
-    statusColor: "text-blue-400 bg-blue-400/10 border-blue-400/30",
+    statusColor: "text-blue-800 bg-blue-100 border-blue-300",
     eta: "14 Oct 2026 (Est)",
     milestones: [
       { step: "Commercial Sales Indent", date: "01 Oct 2026", location: "Andhra Industrial Desk", status: "completed", desc: "Mining allocation and railway rake indent approved." },
@@ -350,46 +229,78 @@ const SAMPLE_SHIPMENTS: Record<string, ShipmentData> = {
   }
 };
 
-const values = [
+const offerings = [
   {
-    icon: ShieldCheck,
-    title: "Trust & Compliance",
-    desc: "Transparent, verified contracts conforming to international Incoterms 2020 rules and bank payment guarantees (LC at Sight / Escrow).",
-    color: "from-blue-600 to-blue-400",
+    title: "Minerals & Flux Stone",
+    category: "Mining & Heavy Industry",
+    desc: "SMS & BF Grade Limestone, Calibrated Lump Iron Ore, Pellets, and high-purity Bauxite for blast furnaces and kiln feed.",
+    image: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=700&q=80",
   },
   {
-    icon: Award,
-    title: "Lab-Verified Quality",
-    desc: "Zero specification deviation. Third-party independent sampling by SGS, Bureau Veritas, and GeoChem prior to cargo loading.",
-    color: "from-amber-500 to-yellow-400",
+    title: "Energy & Carbon Fuels",
+    category: "Power & Thermal Plants",
+    desc: "Indonesian Steaming Coal (GAR 3800-5000), South African RB1/RB3, and Green Delayed Raw/Calcined Pet Coke.",
+    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=700&q=80",
   },
   {
-    icon: Zap,
-    title: "Logistics Commitment",
-    desc: "Integrated port-to-plant delivery covering maritime vessels, containerized freight, and direct railway rakes across Indian trade ports.",
-    color: "from-indigo-600 to-blue-400",
+    title: "Chemicals & Fertilizer Inputs",
+    category: "Agro & Industrial Chemistry",
+    desc: "Technical Non-Coated & Prilled Agro Urea (46% Nitrogen), chemical inputs, and bulk fertilizer commodities.",
+    image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=700&q=80",
+  },
+  {
+    title: "Industrial Scrap & Steel",
+    category: "Recycled Metallurgy",
+    desc: "ISRI-standard HMS 1/2 (80:20) heavy melting scrap, plate & structural steel scrap loaded directly in 20ft containers.",
+    image: "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=700&q=80",
+  },
+  {
+    title: "Agricultural Staples & Spices",
+    category: "Global Food Supply",
+    desc: "Stemless Guntur Teja Chilli, Salem/Nizamabad Turmeric (Curcumin >3%), cleaned Cumin, and export cashews (W180-W320).",
+    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80",
+  },
+  {
+    title: "Port Logistics & Multimodal Freight",
+    category: "Maritime Operations",
+    desc: "Stevedoring at major Indian ports, customs house brokerage, railway rake allocation, and vessel chartering.",
+    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=700&q=80",
   },
 ];
 
-const stats = [
-  { icon: Package, value: 19, suffix: "+", label: "HS-Standard Commodities" },
-  { icon: MapPin, value: 6, suffix: "", label: "Gateway Sea Ports" },
-  { icon: Users, value: 500, suffix: "+", label: "Institutional Trade Partners" },
+const articles = [
+  {
+    title: "Global Maritime Corridors: Port Congestion & Freight Index Outlook 2026",
+    date: "31",
+    month: "Mar",
+    category: "Maritime Logistics",
+    excerpt: "An in-depth analysis of ocean freight rates, vessel charter availability across the Indian Ocean, and bunker fuel impacts on bulk commodity shipping.",
+    image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=700&q=80"
+  },
+  {
+    title: "SGS Chemical Assays: Ensuring Grade Compliance in Bulk Mineral Shipments",
+    date: "28",
+    month: "Mar",
+    category: "Quality Assurance",
+    excerpt: "Best practices in pre-shipment sampling, draft surveys, and moisture determination for limestone and iron ore consignments at loading berths.",
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=80"
+  },
+  {
+    title: "Incoterms 2020 Masterclass: Navigating CIF vs FOB for Bulk Commodities",
+    date: "24",
+    month: "Mar",
+    category: "Commercial Contracts",
+    excerpt: "Key considerations for buyers and sellers when allocating risk, insurance coverage, and demurrage liabilities in international trade contracts.",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=700&q=80"
+  }
 ];
 
-const services = [
-  { icon: Truck, title: "Import Procurement Desk", desc: "Direct sourcing of high-purity minerals, thermal coals, pet coke, and chemical inputs from global mines and producers." },
-  { icon: Globe, title: "Export Sourcing & Freight", desc: "Connecting verified Indian commodity producers, iron ore, and agro-exporters to high-demand international markets." },
-  { icon: Shield, title: "Third-Party Assay Verification", desc: "Rigorous joint-sampling, moisture tests, and chemical assays certified by SGS and Bureau Veritas." },
-  { icon: TrendingUp, title: "Commercial Desk & Incoterms", desc: "Real-time benchmark pricing with flexible Incoterms 2020 options (CIF, FOB, CFR, EXW, and FOR rakes)." },
-];
-
-// ── Main Component ────────────────────────────────────────────────────────────
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
 
-  // Live Freight Tracking State
+  // Freight Tracking State
   const [trackingInput, setTrackingInput] = useState("VAS-IN-849201");
   const [activeShipmentId, setActiveShipmentId] = useState("VAS-IN-849201");
 
@@ -405,11 +316,33 @@ export default function Home() {
   const [rfqContact, setRfqContact] = useState("");
   const [rfqSubmitted, setRfqSubmitted] = useState(false);
 
+  const heroSlides = [
+    {
+      img: slider1Img,
+      subtitle: "WE BRING COMMODITIES INTO REALITY",
+      title: "Trade Everything With Passion",
+      desc: "Delivering reliable international commodity supply chains, verified SGS lab assays, and multimodal freight solutions with 13+ years of group experience."
+    },
+    {
+      img: slider3Img,
+      subtitle: "GLOBAL LOGISTICS & PRECISION SOURCING",
+      title: "Empowering Industries Worldwide",
+      desc: "Direct allocation of high-purity minerals, thermal coals, pet coke, and agricultural staples connecting international ports to industrial plants."
+    },
+    {
+      img: slider4Img,
+      subtitle: "VERIFIED QUALITY · ZERO DEVIATION",
+      title: "Built On Trust, Quality & Commitment",
+      desc: "Rigorous third-party sampling by SGS and Bureau Veritas, standardized Incoterms 2020, and dedicated trade desk execution."
+    }
+  ];
+
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [heroSlides.length]);
 
   const activeShipment = SAMPLE_SHIPMENTS[activeShipmentId] || SAMPLE_SHIPMENTS["VAS-IN-849201"];
 
@@ -419,8 +352,7 @@ export default function Home() {
     if (SAMPLE_SHIPMENTS[cleanId]) {
       setActiveShipmentId(cleanId);
     } else {
-      // Fallback: match by container or default
-      const found = Object.keys(SAMPLE_SHIPMENTS).find(k => 
+      const found = Object.keys(SAMPLE_SHIPMENTS).find(k =>
         k.includes(cleanId) || SAMPLE_SHIPMENTS[k].containerNo.includes(cleanId)
       );
       if (found) {
@@ -465,323 +397,563 @@ export default function Home() {
     ? B2B_PRODUCTS
     : B2B_PRODUCTS.filter(p => p.category === activeCategory);
 
-  const fadeUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
-  };
-
-  const stagger = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.1 } },
-  };
-
   return (
-    <div className="font-sans antialiased overflow-x-hidden bg-[#030b1e] text-white">
-      {/* ── NAVBAR ── */}
-      <nav
-        data-testid="navbar"
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#040d24]/95 backdrop-blur-md shadow-lg py-3 border-b border-white/10"
-            : "bg-transparent py-5"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-full overflow-hidden ring-2 ring-amber-400 ring-offset-1 ring-offset-[#030b1e] bg-navy-900">
-              <img src={logoImg} alt="Vasista Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <div className="font-rajdhani font-bold text-xl leading-tight tracking-wide text-white">VASISTA</div>
-              <div className="text-[10px] uppercase tracking-widest font-semibold text-amber-400">Trading Services Pvt. Ltd.</div>
+    <div className="min-h-screen bg-white text-[#76787C] font-sans antialiased overflow-x-hidden selection:bg-[#FBD903] selection:text-[#13223C]">
+
+      {/* ── 1. TOP BAR (Mirroring vasistaengineering.com) ────────────────── */}
+      <header className="bg-[#13223C] text-white text-xs border-b border-white/10 hidden md:block">
+        <div className="max-w-[1290px] mx-auto px-6 py-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-6 text-gray-300">
+            <a href="mailto:info@vasistatradingservices.com" className="flex items-center gap-2 hover:text-[#FBD903] transition-colors">
+              <Mail className="w-3.5 h-3.5 text-[#FBD903]" />
+              <span>info@vasistatradingservices.com</span>
+            </a>
+            <div className="flex items-center gap-2 text-gray-400">
+              <Clock className="w-3.5 h-3.5 text-[#FBD903]" />
+              <span>Mon - Sat 8:00 - 6:30, Sunday - CLOSED</span>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-8 text-sm font-semibold tracking-wide text-blue-100/80">
-            <a href="#about" className="hover:text-amber-400 transition-colors">Overview</a>
-            <a href="#catalog" className="hover:text-amber-400 transition-colors">B2B Catalog</a>
-            <a href="#tracking" className="hover:text-amber-400 transition-colors">Freight Tracking</a>
-            <a href="#services" className="hover:text-amber-400 transition-colors">Capabilities</a>
-            <a href="#rfq" className="hover:text-amber-400 transition-colors">Submit RFQ</a>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-amber-300 font-mono">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>GSTIN: 37AALCV9169R1ZY</span>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400 text-[11px] uppercase tracking-wider mr-1">Follow Us:</span>
+              <a href="https://facebook.com/share/1HWeDcLf9Q" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors">
+                <SiFacebook className="w-3 h-3" />
+              </a>
+              <a href="https://instagram.com/vasista_trading_services" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors">
+                <SiInstagram className="w-3 h-3" />
+              </a>
+              <a href="https://linkedin.com/company/vasista-trading-services-private-limited" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors">
+                <FaLinkedinIn className="w-3 h-3" />
+              </a>
+              <a href="https://wa.me/918591938908" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors">
+                <SiWhatsapp className="w-3 h-3" />
+              </a>
             </div>
-            <a
-              href="#rfq"
-              data-testid="button-partner-nav"
-              className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-gray-900 font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-amber-400/30 transition-all"
-            >
-              Initiate RFQ <ArrowRight className="h-3.5 w-3.5" />
+
+            <div className="h-4 w-px bg-white/20" />
+
+            <a href="tel:+918591938908" className="flex items-center gap-2 group">
+              <div className="w-6 h-6 rounded bg-[#FBD903] text-[#13223C] flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Phone className="w-3.5 h-3.5" />
+              </div>
+              <div className="leading-tight">
+                <div className="text-[10px] text-gray-400 uppercase font-semibold">Call Anytime</div>
+                <div className="text-white font-bold group-hover:text-[#FBD903] transition-colors">+91 8591938908</div>
+              </div>
             </a>
           </div>
         </div>
+      </header>
+
+      {/* ── 2. STICKY MAIN NAVIGATION BAR ─────────────────────────────────── */}
+      <nav className="sticky top-0 z-50 bg-white shadow-sm border-b border-[#DFE3EA]/80">
+        <div className="max-w-[1290px] mx-auto px-6 h-20 flex items-center justify-between">
+          {/* Logo */}
+          <a href="#" className="flex items-center gap-3 group">
+            <img
+              src={logoImg}
+              alt="Vasista Trading Services"
+              className="h-12 w-auto object-contain transition-transform group-hover:scale-105"
+            />
+            <div>
+              <div className="font-heading text-2xl font-black text-[#13223C] tracking-tight leading-none">
+                VASISTA
+              </div>
+              <div className="text-[10px] font-extrabold tracking-[0.2em] text-[#FBD903] uppercase">
+                Trading Services Pvt. Ltd.
+              </div>
+            </div>
+          </a>
+
+          {/* Desktop Nav Links */}
+          <div className="hidden lg:flex items-center gap-8 font-bold text-[13px] tracking-wider uppercase text-[#13223C]">
+            <a href="#" className="text-[#FBD903] hover:text-[#FBD903] transition-colors relative py-2">
+              HOME
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#FBD903]" />
+            </a>
+            <a href="#about" className="hover:text-[#FBD903] transition-colors py-2">ABOUT US</a>
+            <a href="#services" className="hover:text-[#FBD903] transition-colors py-2">SERVICES</a>
+            <a href="#tracking" className="hover:text-[#FBD903] transition-colors py-2">FREIGHT TRACKING</a>
+            <a href="#catalog" className="hover:text-[#FBD903] transition-colors py-2">B2B CATALOG</a>
+            <a href="#news" className="hover:text-[#FBD903] transition-colors py-2">INSIGHTS</a>
+            <a href="#contact" className="hover:text-[#FBD903] transition-colors py-2">CONTACT</a>
+          </div>
+
+          {/* Right Action Button */}
+          <div className="hidden md:flex items-center gap-4">
+            <a
+              href="#rfq"
+              className="inline-flex items-center gap-2 bg-[#FBD903] hover:bg-[#13223C] text-[#13223C] hover:text-white font-extrabold text-xs uppercase tracking-wider px-7 py-3.5 rounded-none transition-all duration-300 shadow-sm"
+            >
+              <span>GET A FREE QUOTE</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+
+          {/* Mobile Menu Hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 text-[#13223C] hover:text-[#FBD903] focus:outline-none"
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          </button>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-[#13223C] text-white border-t border-white/10 px-6 py-6 space-y-4">
+            <a href="#" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase text-[#FBD903]">HOME</a>
+            <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">ABOUT US</a>
+            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">SERVICES</a>
+            <a href="#tracking" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">FREIGHT TRACKING</a>
+            <a href="#catalog" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">B2B CATALOG</a>
+            <a href="#news" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">INSIGHTS</a>
+            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">CONTACT</a>
+            <div className="pt-2">
+              <a
+                href="#rfq"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-center bg-[#FBD903] text-[#13223C] font-extrabold text-xs uppercase tracking-wider py-3"
+              >
+                GET A FREE QUOTE
+              </a>
+            </div>
+          </div>
+        )}
       </nav>
 
-      {/* ── HERO ── dark section with 3D globe */}
-      <section className="relative min-h-screen bg-[#030b1e] overflow-hidden flex items-center">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(30,79,216,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(30,79,216,0.05)_1px,transparent_1px)] bg-[size:64px_64px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_60%_0%,rgba(20,60,180,0.30),transparent)]" />
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-700/15 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: "6s" }} />
-        <div className="absolute bottom-1/3 right-1/3 w-56 h-56 bg-indigo-600/10 rounded-full blur-[80px] animate-pulse" style={{ animationDuration: "9s" }} />
-        <div className="absolute top-1/2 right-10 w-40 h-40 bg-amber-500/8 rounded-full blur-[60px] animate-pulse" style={{ animationDuration: "7s" }} />
-        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#030b1e] to-transparent" />
+      {/* ── 3. HERO SLIDER SECTION (Matching Revolution Slider) ───────────── */}
+      <section className="relative min-h-[620px] lg:min-h-[720px] bg-[#101C30] overflow-hidden flex items-center">
+        {/* Slide Background Images */}
+        {heroSlides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              activeSlide === index ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"
+            }`}
+            style={{
+              backgroundImage: `url(${slide.img})`,
+              backgroundPosition: "center center",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              transition: "opacity 1s ease-in-out, transform 8s ease"
+            }}
+          />
+        ))}
 
-        <div className="max-w-7xl mx-auto px-6 pt-28 pb-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
-          <motion.div initial="hidden" animate="visible" variants={stagger}>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-6">
-              <Compass className="w-3.5 h-3.5" />
-              <span>International B2B Import & Export Desk</span>
+        {/* Industrial Dark Scrim Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#101C30]/90 via-[#101C30]/75 to-transparent" />
+
+        {/* Content Box */}
+        <div className="max-w-[1290px] mx-auto px-6 py-20 relative z-10 w-full">
+          <div className="max-w-2xl text-white">
+            {/* Signature Eyebrow */}
+            <div className="inline-flex items-center gap-3 text-[#FBD903] font-extrabold text-xs tracking-[0.25em] uppercase mb-4">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>{heroSlides[activeSlide].subtitle}</span>
             </div>
 
-            <motion.h1 variants={fadeUp} className="font-rajdhani text-5xl md:text-6xl xl:text-7xl font-bold text-white leading-[1.05] mb-6">
-              GLOBAL TRADE,{" "}
-              <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
-                INDUSTRIAL
-              </span>{" "}
-              EXCELLENCE
-            </motion.h1>
+            {/* Giant Heading */}
+            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-[1.08] mb-6">
+              {heroSlides[activeSlide].title}
+            </h1>
 
-            <motion.p variants={fadeUp} className="text-blue-200/70 text-lg leading-relaxed max-w-lg mb-10">
-              Vasista Trading Services Private Limited connects industrial enterprises to global commodity supply chains. Direct institutional sourcing with verified HS Codes, SGS lab assays, and port-to-plant freight logistics.
-            </motion.p>
+            {/* Sub-text */}
+            <p className="text-gray-200 text-base sm:text-lg leading-relaxed mb-8 max-w-xl font-medium">
+              {heroSlides[activeSlide].desc}
+            </p>
 
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-4 mb-12">
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4">
               <a
-                href="#catalog"
-                data-testid="button-hero-explore"
-                className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-gray-900 font-bold uppercase tracking-wider px-8 py-4 rounded-full hover:shadow-xl hover:shadow-amber-400/30 transition-all group text-sm"
+                href="#about"
+                className="bg-[#FBD903] hover:bg-[#13223C] text-[#13223C] hover:text-white font-extrabold text-xs uppercase tracking-wider px-8 py-4 transition-all duration-300 shadow-lg flex items-center gap-2"
               >
-                Browse B2B Catalog
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <span>DISCOVER MORE</span>
+                <ArrowRight className="w-4 h-4" />
               </a>
+
               <a
                 href="#tracking"
-                data-testid="button-hero-tracking"
-                className="flex items-center gap-2 border border-white/20 text-white font-bold uppercase tracking-wider px-8 py-4 rounded-full hover:bg-white/10 transition-all text-sm"
+                className="bg-transparent hover:bg-white text-white hover:text-[#13223C] border-2 border-white/80 font-extrabold text-xs uppercase tracking-wider px-8 py-3.5 transition-all duration-300 flex items-center gap-2"
               >
-                <Ship className="h-4 w-4 text-amber-400" /> Track Consignment
+                <Ship className="w-4 h-4 text-[#FBD903]" />
+                <span>TRACK CONSIGNMENT</span>
               </a>
-            </motion.div>
-
-            <motion.div variants={fadeUp} className="grid grid-cols-2 gap-6">
-              {[
-                { val: "19+", label: "HS-Standard Commodities" },
-                { val: "< 24h", label: "Quotation Turnaround SLA" },
-              ].map(s => (
-                <div key={s.label} className="border-l-2 border-amber-400/40 pl-4">
-                  <div className="font-rajdhani text-4xl font-bold bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">{s.val}</div>
-                  <div className="text-blue-300/60 text-xs uppercase tracking-widest mt-0.5">{s.label}</div>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* 3D Globe */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2 }}
-            className="relative h-[480px] lg:h-[560px] flex items-center justify-center"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-amber-400/5 rounded-full blur-3xl" />
-            <div className="w-full h-full">
-              <GlobeCanvas />
             </div>
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-5 py-2 text-xs text-blue-200 whitespace-nowrap">
-              Live Trade Corridor Simulation — Mumbai & Visakhapatnam Hubs
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── STATS BAND ── */}
-      <section className="relative bg-[#030b1e] py-12 border-y border-white/10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-[#040d24] rounded-3xl border border-white/10 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10 overflow-hidden shadow-2xl">
-            {stats.map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12 }}
-                data-testid={`stat-${i}`}
-                className="flex items-center gap-5 px-10 py-9 group hover:bg-white/[0.02] transition-colors"
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-[#0a1a6e] to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-900/40 group-hover:scale-105 transition-transform border border-white/10">
-                  <s.icon className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <div className="font-rajdhani text-4xl font-bold text-white leading-none">
-                    <Counter target={s.value} suffix={s.suffix} />
-                  </div>
-                  <div className="text-gray-400 text-sm mt-1 font-medium">{s.label}</div>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
+
+        {/* Floating 13+ Years Experience Badge (Real Site Marker) */}
+        <div className="hidden md:flex absolute bottom-12 right-12 lg:right-24 z-20 bg-[#FBD903] text-[#13223C] p-6 shadow-2xl flex-col items-center justify-center text-center w-48 border-4 border-white/20">
+          <span className="font-heading text-5xl font-extrabold leading-none">13+</span>
+          <span className="text-xs font-black uppercase tracking-wider mt-1 text-[#13223C]">
+            Years of Experience
+          </span>
+        </div>
+
+        {/* Slider Navigation Arrows & Dots */}
+        <div className="absolute bottom-6 left-6 z-20 flex items-center gap-2">
+          {heroSlides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveSlide(idx)}
+              className={`h-2.5 transition-all rounded-full ${
+                activeSlide === idx ? "w-8 bg-[#FBD903]" : "w-2.5 bg-white/40 hover:bg-white"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
       </section>
 
-      {/* ── ABOUT / VALUES ── */}
-      <section id="about" className="py-24 bg-[#030b1e]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-            >
-              <span className="text-amber-400 font-bold text-xs uppercase tracking-widest mb-3 block">Institutional Authority</span>
-              <h2 className="font-rajdhani text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                Engineering India's Global Commodity Gateway
+      {/* ── 4. ABOUT COMPANY SECTION (Mirroring Elementor Section 3dc97ad) ─ */}
+      <section id="about" className="py-24 bg-white relative overflow-hidden">
+        <div className="max-w-[1290px] mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+            {/* Left Column: Overlapping Real Site Photography & Badges */}
+            <div className="lg:col-span-6 relative">
+              <div className="relative mx-auto max-w-[480px]">
+
+                {/* Base Image (about-2.png) */}
+                <div className="relative z-10 overflow-hidden shadow-xl">
+                  <img
+                    src={about2Img}
+                    alt="Vasista Operations"
+                    className="w-full h-[480px] object-cover object-center"
+                  />
+                </div>
+
+                {/* Overlapping Inset Image (about-3.png) with 15px White Border */}
+                <div className="absolute -bottom-10 -right-4 sm:-right-8 z-20 w-64 sm:w-72 shadow-2xl">
+                  <img
+                    src={about3Img}
+                    alt="Vasista Engineering and Trade"
+                    className="w-full h-auto object-cover border-[12px] border-white shadow-2xl"
+                  />
+                </div>
+
+                {/* Floating Experience Badge */}
+                <div className="absolute top-8 left-4 z-30 bg-[#FBD903] text-[#13223C] p-4 text-center shadow-lg border-2 border-white">
+                  <div className="font-heading text-3xl font-extrabold leading-none">13+</div>
+                  <div className="text-[10px] font-black uppercase tracking-wider mt-0.5">Years Experience</div>
+                </div>
+
+                {/* Dark Navy Banner at Bottom */}
+                <div className="absolute -bottom-6 left-0 z-30 bg-[#13223C] text-white px-6 py-3 font-extrabold text-xs uppercase tracking-wider shadow-lg border-l-4 border-[#FC811B]">
+                  We bring commodities into reality
+                </div>
+
+                {/* Vertical Orange Line Marker */}
+                <div className="absolute -left-6 top-1/4 w-1.5 h-32 bg-[#FC811B] hidden sm:block" />
+              </div>
+            </div>
+
+            {/* Right Column: Mission, Vision, and Text */}
+            <div className="lg:col-span-6 space-y-6 pt-6 lg:pt-0">
+              <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase">
+                <span className="w-8 h-0.5 bg-[#FBD903]" />
+                <span className="text-[#13223C]">ABOUT COMPANY</span>
+              </div>
+
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
+                Empowering Industries Worldwide
               </h2>
-              <p className="text-blue-100/70 leading-relaxed mb-6">
-                Vasista Trading Services Private Limited operates at the intersection of international commodity mining, precision laboratory testing, and multimodal maritime freight. We provide direct institutional allocations for minerals, energy carbon, technical chemicals, and agricultural staples.
+
+              <p className="text-[#76787C] leading-relaxed text-sm sm:text-base">
+                Vasista Trading Services Private Limited is a premier international commodity trading and supply chain organization. With over 13 years of core group background spanning industrial engineering, infrastructure, and multimodal logistics, we connect major global mines and producers directly to steel plants, thermal power units, chemical refineries, and agro processors.
               </p>
-              <p className="text-blue-100/70 leading-relaxed mb-8">
-                Operating under <strong className="text-amber-400 font-semibold">Trust · Quality · Commitment</strong>, our trade desk enforces standardized Incoterms 2020 (CIF, FOB, EXW) with transparent SGS/BV sampling reports on every bill of lading.
-              </p>
-              <div className="flex items-center gap-6">
-                <div className="h-px flex-1 bg-gradient-to-r from-amber-400 to-transparent" />
-                <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-amber-400">
-                  <img src={logoImg} alt="Vasista" className="w-full h-full object-cover" />
+
+              <div className="space-y-4 pt-2">
+                {/* Vision Box */}
+                <div className="border-b border-[#DFE3EA] pb-4">
+                  <div className="font-heading text-lg font-extrabold text-[#13223C] uppercase mb-2">
+                    OUR VISION
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-none bg-[#FBD903] text-[#13223C] flex items-center justify-center flex-shrink-0">
+                      <Eye className="w-5 h-5" />
+                    </div>
+                    <p className="text-sm text-[#76787C] leading-relaxed">
+                      To establish ourselves as the global benchmark for excellence, transparency, and dependability in international commodity trade and freight solutions.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Mission Box */}
+                <div className="border-b border-[#DFE3EA] pb-4">
+                  <div className="font-heading text-lg font-extrabold text-[#13223C] uppercase mb-2">
+                    OUR MISSION
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-none bg-[#FBD903] text-[#13223C] flex items-center justify-center flex-shrink-0">
+                      <Target className="w-5 h-5" />
+                    </div>
+                    <p className="text-sm text-[#76787C] leading-relaxed">
+                      To continuously embrace modern trade technologies, enforce strict laboratory quality compliance, and deliver best-in-class solutions, empowering our partners to thrive in an ever-evolving world.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </motion.div>
 
-            <div className="grid grid-cols-1 gap-5">
-              {values.map((v, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.15 }}
-                  className="bg-[#040d24] rounded-2xl p-6 shadow-xl border border-white/10 flex gap-5 group hover:border-amber-400/40 transition-all"
+              <div className="pt-4 flex items-center gap-6">
+                <a
+                  href="#catalog"
+                  className="bg-[#13223C] hover:bg-[#FBD903] text-white hover:text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-8 py-4 transition-all duration-300 shadow-md inline-flex items-center gap-2"
                 >
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${v.color} flex items-center justify-center flex-shrink-0 shadow-md`}>
-                    <v.icon className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-rajdhani text-xl font-bold text-white mb-1">{v.title}</h3>
-                    <p className="text-blue-200/60 text-sm leading-relaxed">{v.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
+                  <span>EXPLORE COMMODITIES</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+
+                <div className="text-xs font-mono text-[#13223C] font-bold">
+                  GSTIN: 37AALCV9169R1ZY
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* ── GLOBAL B2B PRODUCT CATALOG (HS Codes, Origin Country, MOQs) ── */}
-      <section id="catalog" className="py-24 bg-[#040d24] border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="inline-block text-amber-400 font-bold text-xs uppercase tracking-[0.3em] mb-4 px-5 py-2 rounded-full border border-amber-400/20 bg-amber-400/5">
-              Standardized Trade Matrix
-            </span>
-            <h2 className="font-rajdhani text-4xl md:text-5xl font-bold text-white mt-2">
-              Global B2B Product Catalog
-            </h2>
-            <p className="text-blue-200/60 max-w-2xl mx-auto mt-4 text-sm">
-              Standardized HS Tariff classifications, certified origins, and minimum order quantities for institutional buyers and plant procurement desks.
-            </p>
+      {/* ── 5. COUNTER BAND / ACHIEVEMENTS (Elementor Section 9044d5b) ────── */}
+      <section className="py-16 bg-[#EFF1F5] border-y border-[#DFE3EA]">
+        <div className="max-w-[1290px] mx-auto px-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
 
-            {/* Filter Tabs */}
-            <div className="flex flex-wrap justify-center gap-2 mt-8">
-              {["All", "Minerals & Metals", "Energy & Carbon", "Chemicals & Inputs", "Food & Agri"].map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider transition-all ${
-                    activeCategory === cat
-                      ? "bg-amber-400 text-gray-900 shadow-lg shadow-amber-400/20"
-                      : "bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+            <div className="bg-white p-8 border-b-4 border-[#FBD903] shadow-sm flex items-center gap-5 group hover:shadow-md transition-shadow">
+              <div className="w-14 h-14 bg-[#13223C] group-hover:bg-[#FBD903] text-[#FBD903] group-hover:text-[#13223C] flex items-center justify-center transition-colors">
+                <Package className="w-7 h-7" />
+              </div>
+              <div>
+                <div className="font-heading text-3xl sm:text-4xl font-extrabold text-[#13223C] leading-none">
+                  <Counter target={19} suffix="+" />
+                </div>
+                <div className="text-xs uppercase font-extrabold tracking-wider text-[#76787C] mt-1">
+                  HS Commodities
+                </div>
+              </div>
             </div>
+
+            <div className="bg-white p-8 border-b-4 border-[#FBD903] shadow-sm flex items-center gap-5 group hover:shadow-md transition-shadow">
+              <div className="w-14 h-14 bg-[#13223C] group-hover:bg-[#FBD903] text-[#FBD903] group-hover:text-[#13223C] flex items-center justify-center transition-colors">
+                <Ship className="w-7 h-7" />
+              </div>
+              <div>
+                <div className="font-heading text-3xl sm:text-4xl font-extrabold text-[#13223C] leading-none">
+                  <Counter target={500} suffix="+" />
+                </div>
+                <div className="text-xs uppercase font-extrabold tracking-wider text-[#76787C] mt-1">
+                  Shipments Executed
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 border-b-4 border-[#FBD903] shadow-sm flex items-center gap-5 group hover:shadow-md transition-shadow">
+              <div className="w-14 h-14 bg-[#13223C] group-hover:bg-[#FBD903] text-[#FBD903] group-hover:text-[#13223C] flex items-center justify-center transition-colors">
+                <Award className="w-7 h-7" />
+              </div>
+              <div>
+                <div className="font-heading text-3xl sm:text-4xl font-extrabold text-[#13223C] leading-none">
+                  <Counter target={100} suffix="%" />
+                </div>
+                <div className="text-xs uppercase font-extrabold tracking-wider text-[#76787C] mt-1">
+                  SGS Assayed Cargo
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 border-b-4 border-[#FBD903] shadow-sm flex items-center gap-5 group hover:shadow-md transition-shadow">
+              <div className="w-14 h-14 bg-[#13223C] group-hover:bg-[#FBD903] text-[#FBD903] group-hover:text-[#13223C] flex items-center justify-center transition-colors">
+                <Globe className="w-7 h-7" />
+              </div>
+              <div>
+                <div className="font-heading text-3xl sm:text-4xl font-extrabold text-[#13223C] leading-none">
+                  <Counter target={30} suffix="+" />
+                </div>
+                <div className="text-xs uppercase font-extrabold tracking-wider text-[#76787C] mt-1">
+                  Active Corridors
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. "WHAT WE’RE OFFERING" (Services & Commodities Grid) ────────── */}
+      <section id="services" className="py-24 bg-white relative">
+        <div className="max-w-[1290px] mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>WHAT WE'RE OFFERING</span>
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+            </div>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
+              We provide best services for Global Trading
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((p) => (
-              <motion.div
-                key={p.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-[#030b1e] border border-white/10 hover:border-amber-400/40 rounded-2xl p-6 transition-all flex flex-col justify-between group shadow-xl"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {offerings.map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-[#EFF1F5] group overflow-hidden border border-[#DFE3EA] hover:border-[#FBD903] transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-amber-400/10 text-amber-400 border border-amber-400/30">
-                      {p.hsCode}
-                    </span>
-                    <span className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">
-                      {p.tag}
-                    </span>
+                  {/* Photo with hover zoom */}
+                  <div className="relative h-56 overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 left-4 bg-[#FBD903] text-[#13223C] p-2.5 font-bold shadow-md">
+                      <Truck className="w-5 h-5" />
+                    </div>
                   </div>
 
-                  <h3 className="font-rajdhani text-2xl font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">
-                    {p.name}
-                  </h3>
-
-                  <div className="space-y-2 mb-4 text-xs">
-                    <div className="text-blue-200/70 flex items-start gap-1.5">
-                      <span className="text-gray-400 font-semibold">Origin:</span>
-                      <span>{p.originCountry}</span>
+                  <div className="p-6">
+                    <div className="text-xs uppercase tracking-wider font-extrabold text-[#FC811B] mb-2">
+                      {item.category}
                     </div>
-                    <div className="text-blue-200/70 flex items-start gap-1.5">
-                      <span className="text-gray-400 font-semibold">MOQ:</span>
-                      <span className="text-amber-300 font-medium">{p.moq}</span>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/5 text-blue-200/60 leading-relaxed font-mono text-[11px]">
-                      {p.specs}
-                    </div>
+                    <h3 className="font-heading text-xl font-extrabold text-[#13223C] mb-3 group-hover:text-[#FC811B] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-[#76787C] leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                <div className="p-6 pt-0 border-t border-[#DFE3EA]/50 flex items-center justify-between mt-4">
                   <a
                     href="#rfq"
-                    onClick={() => handleRfqCommodityChange(p.name)}
-                    className="text-xs text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 uppercase tracking-wider"
+                    onClick={() => handleRfqCommodityChange(item.title)}
+                    className="text-xs uppercase font-extrabold tracking-wider text-[#13223C] group-hover:text-[#FC811B] transition-colors flex items-center gap-1.5"
                   >
-                    Quote Desk <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Request Quotation</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </a>
-                  <span className="text-[10px] text-gray-500 font-mono">SGS / BV Verified</span>
+                  <div className="w-8 h-8 rounded-full bg-white group-hover:bg-[#FBD903] text-[#13223C] flex items-center justify-center transition-colors shadow-sm">
+                    <ChevronRight className="w-4 h-4" />
+                  </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── FREIGHT & SHIPMENT TRACKING SYSTEM SKELETON ── */}
-      <section id="tracking" className="py-24 bg-[#030b1e] border-t border-white/10">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="inline-block text-amber-400 font-bold text-xs uppercase tracking-[0.3em] mb-4 px-5 py-2 rounded-full border border-amber-400/20 bg-amber-400/5">
-              Live Logistics Desk
-            </span>
-            <h2 className="font-rajdhani text-4xl md:text-5xl font-bold text-white mt-2">
-              Freight & Container Tracking Terminal
+      {/* ── 7. "WHAT ELSE WE DO" (Elementor Section 8243a87 - Navy Dark) ─── */}
+      <section className="py-24 bg-[#101C30] text-white relative overflow-hidden">
+        <div className="max-w-[1290px] mx-auto px-6 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <div className="w-16 h-16 rounded-full bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-6 shadow-xl">
+              <Play className="w-6 h-6 ml-0.5" />
+            </div>
+
+            <div className="inline-flex items-center gap-3 text-[#FBD903] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>WHAT ELSE WE DO</span>
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+            </div>
+
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
+              Delivering Excellence in Multimodal Freight & Quality Assurance
             </h2>
-            <p className="text-blue-200/60 max-w-xl mx-auto mt-4 text-sm">
-              Live container lookup handling container numbers, carrier statuses, and destination gateway ports across active maritime corridors.
+            <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+              We handle end-to-end institutional supply chains with strict Incoterms 2020 enforcement, third-party SGS assays, and complete customs clearance at gateway sea ports.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-[#13223C] p-8 border-t-4 border-[#FBD903] shadow-xl">
+              <div className="w-12 h-12 bg-white/10 text-[#FBD903] flex items-center justify-center mb-6 font-heading font-black text-xl">
+                01
+              </div>
+              <h3 className="font-heading text-xl font-extrabold text-white mb-3">
+                Direct Mine Procurement
+              </h3>
+              <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                Long-term off-take allocations with certified Indian and international mines for Limestone, Iron Ore, Coal, and recycled steel scrap.
+              </p>
+              <ul className="text-xs text-gray-400 space-y-2 font-mono">
+                <li>✓ Direct producer pricing</li>
+                <li>✓ Minimum 100 MT to Supramax</li>
+                <li>✓ Assured grade consistency</li>
+              </ul>
+            </div>
+
+            <div className="bg-[#13223C] p-8 border-t-4 border-[#FC811B] shadow-xl">
+              <div className="w-12 h-12 bg-white/10 text-[#FC811B] flex items-center justify-center mb-6 font-heading font-black text-xl">
+                02
+              </div>
+              <h3 className="font-heading text-xl font-extrabold text-white mb-3">
+                Incoterms 2020 Compliance
+              </h3>
+              <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                Transparent international trade contracts executing CIF, FOB, CFR, and EXW terms backed by prime bank Letters of Credit (LC at Sight).
+              </p>
+              <ul className="text-xs text-gray-400 space-y-2 font-mono">
+                <li>✓ Strict demurrage controls</li>
+                <li>✓ Comprehensive marine insurance</li>
+                <li>✓ Clean On-Board B/L documentation</li>
+              </ul>
+            </div>
+
+            <div className="bg-[#13223C] p-8 border-t-4 border-[#7EB441] shadow-xl">
+              <div className="w-12 h-12 bg-white/10 text-[#7EB441] flex items-center justify-center mb-6 font-heading font-black text-xl">
+                03
+              </div>
+              <h3 className="font-heading text-xl font-extrabold text-white mb-3">
+                Zero-Tolerance Lab Assays
+              </h3>
+              <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                Independent composite sampling by SGS, Bureau Veritas, and GeoChem prior to vessel hold loading and container sealing.
+              </p>
+              <ul className="text-xs text-gray-400 space-y-2 font-mono">
+                <li>✓ Certified chemical assay reports</li>
+                <li>✓ Moisture & sizing sieve tests</li>
+                <li>✓ Berth draft survey verification</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <a
+              href="#rfq"
+              className="inline-flex items-center gap-2 bg-[#FBD903] hover:bg-white text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-9 py-4 transition-all duration-300 shadow-xl"
+            >
+              <span>REQUEST AN INSTITUTIONAL QUOTE</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 8. FREIGHT TRACKING SYSTEM TERMINAL ───────────────────────────── */}
+      <section id="tracking" className="py-24 bg-white border-t border-[#DFE3EA]">
+        <div className="max-w-[1290px] mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>LIVE LOGISTICS DESK</span>
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+            </div>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
+              Freight & Consignment Tracking Terminal
+            </h2>
+            <p className="text-[#76787C] text-sm mt-3">
+              Live consignment status handling container numbers, ocean carriers, and destination gateway ports.
             </p>
 
-            {/* Quick-track Presets */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
-              <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">Quick Sample Consignments:</span>
+            {/* Quick Demo Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-2.5 mt-6">
+              <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Sample Consignments:</span>
               {Object.keys(SAMPLE_SHIPMENTS).map(id => (
                 <button
                   key={id}
@@ -789,10 +961,10 @@ export default function Home() {
                     setTrackingInput(id);
                     setActiveShipmentId(id);
                   }}
-                  className={`text-xs font-mono px-3.5 py-1.5 rounded-full border transition-all ${
+                  className={`text-xs font-mono font-bold px-3 py-1.5 transition-all ${
                     activeShipmentId === id
-                      ? "bg-amber-400 text-gray-900 border-amber-400 font-bold"
-                      : "bg-white/5 border-white/10 text-gray-300 hover:border-amber-400/40"
+                      ? "bg-[#13223C] text-[#FBD903] shadow"
+                      : "bg-[#EFF1F5] text-[#13223C] hover:bg-[#DFE3EA]"
                   }`}
                 >
                   {id}
@@ -800,94 +972,90 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Tracking Search Input Form */}
-            <form onSubmit={handleTrackingSearch} className="max-w-xl mx-auto mt-6 flex gap-2">
+            {/* Search Input */}
+            <form onSubmit={handleTrackingSearch} className="max-w-lg mx-auto mt-6 flex gap-2">
               <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
                   value={trackingInput}
                   onChange={(e) => setTrackingInput(e.target.value)}
-                  placeholder="Enter Tracking ID or Container No (e.g. VAS-IN-849201)..."
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 font-mono text-sm focus:outline-none focus:border-amber-400"
+                  placeholder="Enter Tracking ID (e.g. VAS-IN-849201)..."
+                  className="w-full pl-10 pr-4 py-3 bg-[#EFF1F5] border border-[#DFE3EA] font-mono text-sm text-[#13223C] focus:outline-none focus:border-[#13223C]"
                 />
               </div>
               <button
                 type="submit"
-                className="bg-amber-400 hover:bg-amber-300 text-gray-900 font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition-colors"
+                className="bg-[#13223C] hover:bg-[#FBD903] text-white hover:text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-6 py-3 transition-colors"
               >
-                Track Cargo
+                TRACK
               </button>
             </form>
           </div>
 
           {/* Active Consignment Card */}
-          <div className="bg-[#040d24] border border-white/10 rounded-3xl p-8 shadow-2xl">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/10 mb-8">
+          <div className="bg-[#EFF1F5] border border-[#DFE3EA] p-8 md:p-10 shadow-sm">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-[#DFE3EA] mb-8">
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="font-mono text-2xl font-bold text-white">{activeShipment.trackingId}</span>
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full border font-mono ${activeShipment.statusColor}`}>
+                <div className="flex flex-wrap items-center gap-3 mb-2">
+                  <span className="font-heading text-2xl font-black text-[#13223C]">{activeShipment.trackingId}</span>
+                  <span className={`text-xs font-extrabold px-3 py-1 border font-mono ${activeShipment.statusColor}`}>
                     {activeShipment.status}
                   </span>
                 </div>
-                <div className="text-xs text-blue-200/60 font-mono flex flex-wrap gap-x-4 gap-y-1">
-                  <span>Container: <strong className="text-white">{activeShipment.containerNo}</strong></span>
-                  <span>HS Code: <strong className="text-amber-400">{activeShipment.hsCode}</strong></span>
-                  <span>Carrier: <strong className="text-white">{activeShipment.carrier}</strong></span>
-                  <span>Vessel: <strong className="text-white">{activeShipment.vessel}</strong></span>
+                <div className="text-xs text-[#76787C] font-mono flex flex-wrap gap-x-4 gap-y-1">
+                  <span>Container: <strong className="text-[#13223C]">{activeShipment.containerNo}</strong></span>
+                  <span>HS Code: <strong className="text-[#FC811B]">{activeShipment.hsCode}</strong></span>
+                  <span>Carrier: <strong className="text-[#13223C]">{activeShipment.carrier}</strong></span>
+                  <span>Vessel: <strong className="text-[#13223C]">{activeShipment.vessel}</strong></span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-3">
+              <div className="flex items-center gap-4 bg-white border border-[#DFE3EA] px-5 py-3 shadow-sm">
                 <div>
-                  <div className="text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Port of Loading</div>
-                  <div className="font-bold text-sm text-white">{activeShipment.originPort}</div>
+                  <div className="text-[10px] uppercase text-gray-400 font-extrabold tracking-wider">Port of Loading</div>
+                  <div className="font-heading font-extrabold text-sm text-[#13223C]">{activeShipment.originPort}</div>
                 </div>
-                <div className="text-amber-400 font-bold text-lg">➔</div>
+                <div className="text-[#FC811B] font-bold text-lg">➔</div>
                 <div>
-                  <div className="text-[10px] uppercase text-gray-400 font-semibold tracking-wider">Port of Discharge</div>
-                  <div className="font-bold text-sm text-white">{activeShipment.destPort}</div>
+                  <div className="text-[10px] uppercase text-gray-400 font-extrabold tracking-wider">Port of Discharge</div>
+                  <div className="font-heading font-extrabold text-sm text-[#13223C]">{activeShipment.destPort}</div>
                 </div>
               </div>
             </div>
 
-            {/* Milestones Progression Timeline */}
+            {/* Milestones Timeline */}
             <div className="space-y-6">
               {activeShipment.milestones.map((m, idx) => (
-                <div key={idx} className="relative flex items-start gap-4 group">
+                <div key={idx} className="relative flex items-start gap-4">
                   {idx !== activeShipment.milestones.length - 1 && (
                     <div
                       className={`absolute left-5 top-10 bottom-0 w-0.5 ${
-                        m.status === "completed" ? "bg-amber-400" : "bg-white/10"
+                        m.status === "completed" ? "bg-[#13223C]" : "bg-[#DFE3EA]"
                       }`}
                     />
                   )}
 
                   <div
-                    className={`relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                    className={`relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center font-heading font-bold text-xs ${
                       m.status === "completed"
-                        ? "border-amber-400 bg-amber-400 text-gray-900"
+                        ? "bg-[#13223C] text-[#FBD903]"
                         : m.status === "current"
-                        ? "border-amber-400 bg-amber-400/20 text-amber-400 ring-4 ring-amber-400/20"
-                        : "border-white/20 bg-[#0b101b] text-gray-500"
+                        ? "bg-[#FBD903] text-[#13223C] ring-4 ring-[#FBD903]/30"
+                        : "bg-white border border-[#DFE3EA] text-gray-400"
                     }`}
                   >
-                    {m.status === "completed" ? (
-                      <CheckCircle2 className="h-4 w-4" />
-                    ) : (
-                      <span className="text-xs font-bold font-mono">0{idx + 1}</span>
-                    )}
+                    {m.status === "completed" ? <CheckCircle2 className="h-5 w-5" /> : `0${idx + 1}`}
                   </div>
 
-                  <div className="flex-1 rounded-2xl bg-white/[0.02] border border-white/5 p-4 hover:border-amber-400/30 transition-all">
+                  <div className="flex-1 bg-white border border-[#DFE3EA] p-5 shadow-sm">
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-                      <span className="font-bold text-sm text-white">{m.step}</span>
-                      <span className="text-xs font-mono text-amber-400">{m.date}</span>
+                      <span className="font-heading font-extrabold text-sm text-[#13223C]">{m.step}</span>
+                      <span className="text-xs font-mono font-bold text-[#FC811B]">{m.date}</span>
                     </div>
-                    <p className="text-xs text-blue-200/70 leading-relaxed mb-2">{m.desc}</p>
-                    <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-mono">
-                      <MapPin className="w-3 h-3 text-amber-400" />
+                    <p className="text-xs text-[#76787C] leading-relaxed mb-2">{m.desc}</p>
+                    <div className="flex items-center gap-1.5 text-[11px] text-gray-500 font-mono">
+                      <MapPin className="w-3.5 h-3.5 text-[#FC811B]" />
                       <span>{m.location}</span>
                     </div>
                   </div>
@@ -898,66 +1066,125 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── SERVICES / CAPABILITIES ── */}
-      <section id="services" className="bg-[#040d24] py-24 relative overflow-hidden border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="inline-block text-amber-400 font-bold text-xs uppercase tracking-[0.3em] mb-4 px-5 py-2 rounded-full border border-amber-400/20 bg-amber-400/5">Trade Scope</span>
-            <h2 className="font-rajdhani text-4xl md:text-5xl font-bold text-white mt-2">Operational Capabilities</h2>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto mt-5" />
-          </motion.div>
+      {/* ── 9. GLOBAL B2B PRODUCT CATALOG (HS Codes, Origins, MOQs) ───────── */}
+      <section id="catalog" className="py-24 bg-[#EFF1F5]">
+        <div className="max-w-[1290px] mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>STANDARDIZED TRADE MATRIX</span>
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+            </div>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
+              Global B2B Product Catalog
+            </h2>
+            <p className="text-[#76787C] text-sm mt-3">
+              Harmonized Tariff classifications, verified origins, chemical assay specs, and minimum order quantities.
+            </p>
+
+            {/* Category Tabs */}
+            <div className="flex flex-wrap justify-center gap-2 mt-8">
+              {["All", "Minerals & Metals", "Energy & Carbon", "Chemicals & Inputs", "Food & Agri"].map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider transition-all ${
+                    activeCategory === cat
+                      ? "bg-[#13223C] text-[#FBD903] shadow"
+                      : "bg-white text-[#13223C] border border-[#DFE3EA] hover:bg-[#DFE3EA]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12 }}
-                className="group relative bg-[#030b1e] border border-white/10 rounded-3xl p-8 hover:border-amber-400/40 transition-all overflow-hidden shadow-xl"
+            {filteredProducts.map((p) => (
+              <div
+                key={p.id}
+                className="bg-white border border-[#DFE3EA] hover:border-[#13223C] p-6 shadow-sm transition-all duration-300 flex flex-col justify-between group"
               >
-                <div className="relative z-10">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-900/40 group-hover:from-amber-500 group-hover:to-amber-700 transition-all">
-                    <s.icon className="h-6 w-6 text-white" />
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 bg-[#EFF1F5] text-[#13223C] border border-[#DFE3EA]">
+                      {p.hsCode}
+                    </span>
+                    <span className="text-[10px] text-[#FC811B] uppercase tracking-widest font-black">
+                      {p.tag}
+                    </span>
                   </div>
-                  <h3 className="font-rajdhani font-bold text-xl text-white mb-3">{s.title}</h3>
-                  <p className="text-blue-200/60 text-sm leading-relaxed">{s.desc}</p>
+
+                  <h3 className="font-heading text-xl font-extrabold text-[#13223C] mb-2 group-hover:text-[#FC811B] transition-colors">
+                    {p.name}
+                  </h3>
+
+                  <div className="space-y-2 mb-4 text-xs">
+                    <div className="text-[#76787C] flex items-start gap-1.5">
+                      <span className="text-[#13223C] font-bold">Origin:</span>
+                      <span>{p.originCountry}</span>
+                    </div>
+                    <div className="text-[#76787C] flex items-start gap-1.5">
+                      <span className="text-[#13223C] font-bold">MOQ:</span>
+                      <span className="text-[#13223C] font-semibold">{p.moq}</span>
+                    </div>
+                    <div className="p-2.5 bg-[#EFF1F5] border border-[#DFE3EA] text-[#13223C] leading-relaxed font-mono text-[11px]">
+                      {p.specs}
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
+
+                <div className="pt-4 border-t border-[#DFE3EA] flex items-center justify-between">
+                  <a
+                    href="#rfq"
+                    onClick={() => handleRfqCommodityChange(p.name)}
+                    className="text-xs text-[#13223C] hover:text-[#FC811B] font-extrabold flex items-center gap-1 uppercase tracking-wider"
+                  >
+                    Quote Desk <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                  <span className="text-[10px] text-gray-400 font-mono">SGS / BV Verified</span>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── REQUEST FOR QUOTE (RFQ) CUSTOM FORM ENGINE ── */}
-      <section id="rfq" className="py-24 bg-[#030b1e] border-t border-white/10">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <span className="text-amber-400 font-bold text-xs uppercase tracking-widest mb-3 block">Direct Commercial Desk</span>
-            <h2 className="font-rajdhani text-4xl md:text-5xl font-bold text-white">Request for Quote (RFQ) Engine</h2>
-            <p className="text-blue-200/60 max-w-lg mx-auto mt-4 text-sm">
+      {/* ── 10. REQUEST FOR QUOTE (RFQ) FORM ENGINE ───────────────────────── */}
+      <section id="rfq" className="py-24 bg-white border-t border-[#DFE3EA]">
+        <div className="max-w-[960px] mx-auto px-6">
+          <div className="text-center max-w-xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>DIRECT COMMERCIAL DESK</span>
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+            </div>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
+              Request for Quote (RFQ) Engine
+            </h2>
+            <p className="text-[#76787C] text-sm mt-3">
               Submit your commodity trade parameters for instant desk evaluation, CIF/FOB pricing, and specification alignment.
             </p>
           </div>
 
-          <div className="bg-[#040d24] border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl">
-            {/* Mode Toggle */}
-            <div className="flex rounded-full bg-white/5 p-1 mb-8 max-w-sm mx-auto border border-white/10">
+          <div className="bg-[#EFF1F5] border border-[#DFE3EA] p-8 md:p-12 shadow-sm">
+            {/* Mode Switcher */}
+            <div className="flex bg-white p-1 mb-8 max-w-sm mx-auto border border-[#DFE3EA]">
               <button
                 type="button"
                 onClick={() => setRfqMode("BUYER")}
-                className={`flex-1 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition-all ${
-                  rfqMode === "BUYER" ? "bg-amber-400 text-gray-900 shadow-md" : "text-gray-400 hover:text-white"
+                className={`flex-1 py-2.5 text-xs font-extrabold tracking-wider uppercase transition-all ${
+                  rfqMode === "BUYER" ? "bg-[#13223C] text-[#FBD903] shadow-sm" : "text-[#76787C] hover:text-[#13223C]"
                 }`}
               >
-                Institutional Buyer RFQ
+                Institutional Buyer
               </button>
               <button
                 type="button"
                 onClick={() => setRfqMode("SUPPLIER")}
-                className={`flex-1 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition-all ${
-                  rfqMode === "SUPPLIER" ? "bg-amber-400 text-gray-900 shadow-md" : "text-gray-400 hover:text-white"
+                className={`flex-1 py-2.5 text-xs font-extrabold tracking-wider uppercase transition-all ${
+                  rfqMode === "SUPPLIER" ? "bg-[#13223C] text-[#FBD903] shadow-sm" : "text-[#76787C] hover:text-[#13223C]"
                 }`}
               >
                 Supplier / Mine Allocation
@@ -967,25 +1194,25 @@ export default function Home() {
             <form onSubmit={handleRfqSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider block mb-2">
+                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
                     Commodity Selection
                   </label>
                   <select
                     value={selectedCommodity}
                     onChange={(e) => handleRfqCommodityChange(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400"
+                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
                   >
                     {B2B_PRODUCTS.map(p => (
-                      <option key={p.id} value={p.name} className="bg-[#040d24] text-white">
+                      <option key={p.id} value={p.name}>
                         {p.name} ({p.hsCode})
                       </option>
                     ))}
-                    <option value="Custom Mineral/Commodity" className="bg-[#040d24] text-white">Custom Mineral/Commodity Requirement</option>
+                    <option value="Custom Mineral/Commodity">Custom Mineral/Commodity Requirement</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider block mb-2">
+                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
                     Target Volume / Lot Size
                   </label>
                   <input
@@ -993,7 +1220,7 @@ export default function Home() {
                     value={rfqVolume}
                     onChange={(e) => setRfqVolume(e.target.value)}
                     placeholder="e.g. 500 MT, 10x20ft FCL, Bulk Vessel"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400"
+                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
                     required
                   />
                 </div>
@@ -1001,45 +1228,45 @@ export default function Home() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider block mb-2">
+                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
                     Incoterms 2020 Preference
                   </label>
                   <select
                     value={rfqIncoterm}
                     onChange={(e) => setRfqIncoterm(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400"
+                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
                   >
-                    <option value="CIF" className="bg-[#040d24]">CIF — Cost, Insurance & Freight (Discharge Port)</option>
-                    <option value="FOB" className="bg-[#040d24]">FOB — Free on Board (Loading Port)</option>
-                    <option value="CFR" className="bg-[#040d24]">CFR — Cost & Freight</option>
-                    <option value="EXW" className="bg-[#040d24]">EXW — Ex Works (Mine/Stockyard)</option>
-                    <option value="FOR" className="bg-[#040d24]">FOR — Free on Rail (Destination Siding)</option>
+                    <option value="CIF">CIF — Cost, Insurance & Freight (Discharge Port)</option>
+                    <option value="FOB">FOB — Free on Board (Loading Port)</option>
+                    <option value="CFR">CFR — Cost & Freight</option>
+                    <option value="EXW">EXW — Ex Works (Mine/Stockyard)</option>
+                    <option value="FOR">FOR — Free on Rail (Destination Siding)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider block mb-2">
+                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
                     Discharge Port / Gateway
                   </label>
                   <select
                     value={rfqPort}
                     onChange={(e) => setRfqPort(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400"
+                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
                   >
-                    <option value="Visakhapatnam Port (INVTZ)" className="bg-[#040d24]">Visakhapatnam Port (INVTZ)</option>
-                    <option value="Gangavaram Port (INGGV)" className="bg-[#040d24]">Gangavaram Port (INGGV)</option>
-                    <option value="JNPT Mumbai / Nhava Sheva (INNSA)" className="bg-[#040d24]">JNPT Mumbai (INNSA)</option>
-                    <option value="Chennai Port (INMAA)" className="bg-[#040d24]">Chennai Port (INMAA)</option>
-                    <option value="Mundra Port, Gujarat (INMUN)" className="bg-[#040d24]">Mundra Port (INMUN)</option>
-                    <option value="Port of Singapore (SGSIN)" className="bg-[#040d24]">Port of Singapore (SGSIN)</option>
-                    <option value="Port of Jebel Ali, UAE (AEJEA)" className="bg-[#040d24]">Jebel Ali, UAE (AEJEA)</option>
-                    <option value="Direct Plant Rail Siding" className="bg-[#040d24]">Direct Plant Rail Siding</option>
+                    <option value="Visakhapatnam Port (INVTZ)">Visakhapatnam Port (INVTZ)</option>
+                    <option value="Gangavaram Port (INGGV)">Gangavaram Port (INGGV)</option>
+                    <option value="JNPT Mumbai / Nhava Sheva (INNSA)">JNPT Mumbai (INNSA)</option>
+                    <option value="Chennai Port (INMAA)">Chennai Port (INMAA)</option>
+                    <option value="Mundra Port, Gujarat (INMUN)">Mundra Port (INMUN)</option>
+                    <option value="Port of Singapore (SGSIN)">Port of Singapore (SGSIN)</option>
+                    <option value="Port of Jebel Ali, UAE (AEJEA)">Jebel Ali, UAE (AEJEA)</option>
+                    <option value="Direct Plant Rail Siding">Direct Plant Rail Siding</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider block mb-2">
+                <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
                   Chemical Assay & Specifications
                 </label>
                 <input
@@ -1047,26 +1274,26 @@ export default function Home() {
                   value={rfqSpecs}
                   onChange={(e) => setRfqSpecs(e.target.value)}
                   placeholder="e.g. CaCO3 > 95%, Fe > 64%, Ash < 12%, Moisture tolerances..."
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400"
+                  className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider block mb-2">
-                    Your Full Name
+                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
+                    Full Name
                   </label>
                   <input
                     type="text"
                     value={rfqName}
                     onChange={(e) => setRfqName(e.target.value)}
                     placeholder="e.g. Suresh Varma"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400"
+                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
                     required
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider block mb-2">
+                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
                     Company Name
                   </label>
                   <input
@@ -1074,44 +1301,45 @@ export default function Home() {
                     value={rfqCompany}
                     onChange={(e) => setRfqCompany(e.target.value)}
                     placeholder="e.g. Global Steels Ltd"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400"
+                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
                     required
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider block mb-2">
+                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
                     Official Email / Phone
                   </label>
                   <input
                     type="text"
                     value={rfqContact}
                     onChange={(e) => setRfqContact(e.target.value)}
-                    placeholder="e.g. procurement@company.com"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400"
+                    placeholder="e.g. trade@company.com"
+                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
                     required
                   />
                 </div>
               </div>
 
               {rfqSubmitted && (
-                <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono text-center">
-                  ✓ RFQ registered successfully. Our commercial trade desk coordinator will contact you within 24 hours.
+                <div className="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-mono text-center">
+                  ✓ RFQ registered successfully. Our commercial trade desk will contact you within 24 hours.
                 </div>
               )}
 
               <div className="pt-4 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <button
                   type="submit"
-                  className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-yellow-400 text-gray-900 font-bold uppercase tracking-wider px-8 py-3.5 rounded-full hover:shadow-xl hover:shadow-amber-400/30 transition-all text-xs"
+                  className="w-full sm:w-auto bg-[#13223C] hover:bg-[#FBD903] text-white hover:text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-8 py-4 transition-all duration-300 shadow-md"
                 >
                   Submit Institutional RFQ
                 </button>
                 <button
                   type="button"
                   onClick={handleWhatsAppRfq}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 border border-emerald-400/40 bg-emerald-400/10 hover:bg-emerald-400/20 text-emerald-300 font-bold uppercase tracking-wider px-6 py-3.5 rounded-full transition-all text-xs"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white font-extrabold text-xs uppercase tracking-wider px-6 py-4 transition-all shadow-md"
                 >
-                  <span>💬 Instant WhatsApp Quote (+91 85919 38908)</span>
+                  <SiWhatsapp className="w-4 h-4" />
+                  <span>Instant WhatsApp Quote (+91 85919 38908)</span>
                 </button>
               </div>
             </form>
@@ -1119,117 +1347,255 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CONTACT ── */}
-      <section id="contact" className="py-24 bg-[#040d24] border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-amber-400 font-bold text-xs uppercase tracking-widest mb-3 block">Direct Desk Coordinates</span>
-            <h2 className="font-rajdhani text-4xl md:text-5xl font-bold text-white">Commercial Trade Desk</h2>
-            <p className="text-blue-200/60 max-w-md mx-auto mt-4 text-sm">
-              Connect directly with our institutional trading desk for contracts, rake allotments, and port logistics.
-            </p>
+      {/* ── 11. BLOG POSTS / INSIGHTS (Elementor Section 23ed9af) ─────────── */}
+      <section id="news" className="py-24 bg-[#EFF1F5]">
+        <div className="max-w-[1290px] mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>DIRECTLY BLOG POSTS</span>
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+            </div>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
+              Latest news & articles from the posts
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
-            {[
-              { icon: Mail, label: "Email", value: "info@vasistatradingservices.com", href: "mailto:info@vasistatradingservices.com", testid: "link-contact-email" },
-              { icon: Phone, label: "Desk Phone", value: "+91 85919 38908", href: "tel:+918591938908", testid: "link-contact-phone" },
-              { icon: Globe, label: "Website", value: "vasistatradingservices.com", href: "https://www.vasistatradingservices.com", testid: "link-contact-website" },
-              { icon: MapPin, label: "Headquarters", value: "Mumbai & Andhra Pradesh Ports, India", href: "#", testid: "link-contact-location" },
-            ].map((item, i) => (
-              <motion.a
-                key={i}
-                href={item.href}
-                target={item.href.startsWith("http") ? "_blank" : undefined}
-                rel="noopener noreferrer"
-                data-testid={item.testid}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -4 }}
-                className="group bg-[#030b1e] hover:bg-[#0a1a6e] border border-white/10 hover:border-amber-400/40 rounded-2xl p-6 flex flex-col items-center text-center transition-all duration-300 shadow-xl"
-              >
-                <div className="w-12 h-12 bg-white/5 group-hover:bg-white/10 rounded-xl flex items-center justify-center mb-4 transition-all">
-                  <item.icon className="h-5 w-5 text-amber-400 group-hover:text-yellow-300 transition-colors" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {articles.map((item, idx) => (
+              <div key={idx} className="bg-white border border-[#DFE3EA] overflow-hidden group shadow-sm flex flex-col justify-between">
+                <div>
+                  <div className="relative h-56 overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    {/* Date Badge (Elementor Style) */}
+                    <div className="absolute top-4 left-4 bg-[#13223C] text-white p-3 text-center min-w-[54px] shadow-md border-t-2 border-[#FBD903]">
+                      <div className="font-heading text-xl font-extrabold leading-none">{item.date}</div>
+                      <div className="text-[10px] uppercase font-bold text-[#FBD903] mt-0.5">{item.month}</div>
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <div className="text-xs font-bold text-[#FC811B] uppercase tracking-wider mb-2">
+                      {item.category}
+                    </div>
+                    <h3 className="font-heading text-lg font-extrabold text-[#13223C] leading-snug mb-3 group-hover:text-[#FC811B] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-[#76787C] leading-relaxed">
+                      {item.excerpt}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-xs uppercase tracking-widest text-gray-400 group-hover:text-blue-200 font-semibold mb-1 transition-colors">{item.label}</div>
-                <div className="text-sm font-medium text-white transition-colors">{item.value}</div>
-              </motion.a>
+
+                <div className="p-6 pt-0 border-t border-[#DFE3EA]/50 mt-4">
+                  <a
+                    href="#rfq"
+                    className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#13223C] group-hover:text-[#FC811B] uppercase tracking-wider transition-colors"
+                  >
+                    <span>Read More</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="bg-[#020713] border-t border-white/10 pt-16 pb-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="h-10 w-10 rounded-full overflow-hidden ring-2 ring-amber-400">
-                  <img src={logoImg} alt="Vasista" className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <div className="font-rajdhani font-bold text-xl text-white leading-tight">VASISTA</div>
-                  <div className="text-[10px] uppercase tracking-widest text-amber-400 font-semibold">Trading Services Pvt. Ltd.</div>
-                </div>
-              </div>
-              <p className="text-blue-200/50 text-sm leading-relaxed max-w-sm mb-6">
-                International import/export trading desk. Delivering specification-verified industrial commodities, energy fuels, and agricultural staples. GSTIN: 37AALCV9169R1ZY.
-              </p>
-              <div className="flex gap-3">
-                {[
-                  { icon: SiFacebook, href: "https://facebook.com/share/1HWeDcLf9Q", testid: "link-social-facebook" },
-                  { icon: SiInstagram, href: "https://instagram.com/vasista_trading_services", testid: "link-social-instagram" },
-                  { icon: FaLinkedinIn, href: "https://linkedin.com/company/vasista-trading-services-private-limited", testid: "link-social-linkedin" },
-                ].map(({ icon: Icon, href, testid }) => (
-                  <a
-                    key={testid}
-                    href={href}
-                    data-testid={testid}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-9 h-9 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-amber-400 hover:border-amber-400 hover:text-gray-900 text-white/60 transition-all"
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                  </a>
-                ))}
-              </div>
+      {/* ── 12. CONTACT COORDINATES ───────────────────────────────────────── */}
+      <section id="contact" className="py-24 bg-white border-t border-[#DFE3EA]">
+        <div className="max-w-[1290px] mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>DIRECT DESK COORDINATES</span>
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
             </div>
-
-            <div>
-              <div className="font-rajdhani font-bold text-white text-lg mb-4">Core Trade Verticals</div>
-              <ul className="space-y-2 text-sm text-blue-200/50 font-mono text-xs">
-                <li>• Minerals & Metals (HS 25/26/72)</li>
-                <li>• Energy & Carbon (HS 27)</li>
-                <li>• Chemicals & Agrochemicals (HS 31/38)</li>
-                <li>• Agro & Food Commodities (HS 08/09/20)</li>
-              </ul>
-            </div>
-
-            <div>
-              <div className="font-rajdhani font-bold text-white text-lg mb-4">Gateway Ports</div>
-              <ul className="space-y-2 text-sm text-blue-200/50 font-mono text-xs">
-                <li>• Visakhapatnam (INVTZ)</li>
-                <li>• Gangavaram (INGGV)</li>
-                <li>• JNPT Mumbai (INNSA)</li>
-                <li>• Mundra Port (INMUN)</li>
-                <li>• Chennai Port (INMAA)</li>
-              </ul>
-            </div>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
+              Commercial Trade Desk
+            </h2>
+            <p className="text-[#76787C] text-sm mt-3">
+              Connect directly with our trading coordinators for allocation contracts, rake allotments, and port logistics.
+            </p>
           </div>
 
-          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-200/30">
-            <p>&copy; {new Date().getFullYear()} Vasista Trading Services Pvt. Ltd. All rights reserved.</p>
-            <p className="flex items-center gap-2">
-              TRUST <span className="w-1 h-1 rounded-full bg-amber-400/50 inline-block" />
-              QUALITY <span className="w-1 h-1 rounded-full bg-amber-400/50 inline-block" />
-              COMMITMENT
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <a
+              href="mailto:info@vasistatradingservices.com"
+              className="bg-[#EFF1F5] hover:bg-[#13223C] group p-8 text-center border border-[#DFE3EA] transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-4 transition-colors">
+                <Mail className="w-5 h-5" />
+              </div>
+              <div className="text-xs uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
+                Official Email
+              </div>
+              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white break-all">
+                info@vasistatradingservices.com
+              </div>
+            </a>
+
+            <a
+              href="tel:+918591938908"
+              className="bg-[#EFF1F5] hover:bg-[#13223C] group p-8 text-center border border-[#DFE3EA] transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-4 transition-colors">
+                <Phone className="w-5 h-5" />
+              </div>
+              <div className="text-xs uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
+                Desk Hotline
+              </div>
+              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white">
+                +91 85919 38908
+              </div>
+            </a>
+
+            <a
+              href="https://www.vasistatradingservices.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#EFF1F5] hover:bg-[#13223C] group p-8 text-center border border-[#DFE3EA] transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-4 transition-colors">
+                <Globe className="w-5 h-5" />
+              </div>
+              <div className="text-xs uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
+                Official Portal
+              </div>
+              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white">
+                vasistatradingservices.com
+              </div>
+            </a>
+
+            <div className="bg-[#EFF1F5] hover:bg-[#13223C] group p-8 text-center border border-[#DFE3EA] transition-all duration-300">
+              <div className="w-12 h-12 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-4 transition-colors">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <div className="text-xs uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
+                Port Corridors
+              </div>
+              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white">
+                Mumbai & Andhra Ports, India
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 13. OFFICIAL FOOTER (Mirroring vasistaengineering.com) ────────── */}
+      <footer className="bg-[#101C30] text-gray-300 pt-20 pb-10 border-t border-white/10">
+        <div className="max-w-[1290px] mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/10">
+
+            {/* Col 1: Brand & Bio */}
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <img src={logoImg} alt="Vasista Logo" className="h-10 w-auto brightness-110" />
+                <div>
+                  <div className="font-heading text-xl font-black text-white leading-none">VASISTA</div>
+                  <div className="text-[9px] uppercase tracking-widest text-[#FBD903] font-extrabold">Trading Services Pvt. Ltd.</div>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 leading-relaxed mb-6">
+                Delivering reliable commodity trading, verified SGS assays, and multimodal freight solutions across minerals, energy fuels, and agro commodities. GSTIN: 37AALCV9169R1ZY.
+              </p>
+              <div className="flex items-center gap-2">
+                <a href="https://facebook.com/share/1HWeDcLf9Q" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors">
+                  <SiFacebook className="w-3.5 h-3.5" />
+                </a>
+                <a href="https://instagram.com/vasista_trading_services" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors">
+                  <SiInstagram className="w-3.5 h-3.5" />
+                </a>
+                <a href="https://linkedin.com/company/vasista-trading-services-private-limited" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors">
+                  <FaLinkedinIn className="w-3.5 h-3.5" />
+                </a>
+                <a href="https://wa.me/918591938908" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors">
+                  <SiWhatsapp className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Col 2: Quick Links */}
+            <div>
+              <div className="font-heading text-base font-extrabold text-white uppercase tracking-wider mb-6 pb-2 border-b border-[#FBD903] inline-block">
+                Navigation
+              </div>
+              <ul className="space-y-3 text-xs uppercase tracking-wider font-bold">
+                <li><a href="#" className="hover:text-[#FBD903] transition-colors">Home</a></li>
+                <li><a href="#about" className="hover:text-[#FBD903] transition-colors">About Us</a></li>
+                <li><a href="#services" className="hover:text-[#FBD903] transition-colors">Commodities & Services</a></li>
+                <li><a href="#tracking" className="hover:text-[#FBD903] transition-colors">Freight Tracking</a></li>
+                <li><a href="#catalog" className="hover:text-[#FBD903] transition-colors">B2B Product Matrix</a></li>
+                <li><a href="#rfq" className="hover:text-[#FBD903] transition-colors">RFQ Desk</a></li>
+                <li><a href="#contact" className="hover:text-[#FBD903] transition-colors">Contact</a></li>
+              </ul>
+            </div>
+
+            {/* Col 3: Coordinates */}
+            <div>
+              <div className="font-heading text-base font-extrabold text-white uppercase tracking-wider mb-6 pb-2 border-b border-[#FBD903] inline-block">
+                Locations
+              </div>
+              <div className="space-y-4 text-xs">
+                <div>
+                  <div className="text-white font-bold mb-1">Registered Office:</div>
+                  <p className="text-gray-400">Vizianagaram, Andhra Pradesh 535002, India</p>
+                </div>
+                <div>
+                  <div className="text-white font-bold mb-1">Operational Desk:</div>
+                  <p className="text-gray-400">Navi Mumbai, Maharashtra, India</p>
+                </div>
+                <div>
+                  <div className="text-white font-bold mb-1">Direct Phone:</div>
+                  <p className="text-[#FBD903] font-mono font-bold">+91 85919 38908</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Col 4: Newsletter */}
+            <div>
+              <div className="font-heading text-base font-extrabold text-white uppercase tracking-wider mb-6 pb-2 border-b border-[#FBD903] inline-block">
+                Newsletter
+              </div>
+              <p className="text-xs text-gray-400 mb-4">
+                Subscribe for weekly benchmark commodity pricing, freight indices, and port updates.
+              </p>
+              <form onSubmit={(e) => { e.preventDefault(); alert("Subscribed successfully!"); }} className="flex">
+                <input
+                  type="email"
+                  placeholder="Your Email Address"
+                  className="w-full bg-white/5 border border-white/10 px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#FBD903]"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="bg-[#FBD903] hover:bg-white text-[#13223C] px-4 font-bold text-xs"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+          {/* Copyright bar */}
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+            <p>© Copyright 2025-2026 by vasistatradingservices.com. All rights reserved.</p>
+            <div className="flex items-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+              <span>TRUST</span>
+              <span className="w-1 h-1 rounded-full bg-[#FBD903]" />
+              <span>QUALITY</span>
+              <span className="w-1 h-1 rounded-full bg-[#FBD903]" />
+              <span>COMMITMENT</span>
+            </div>
           </div>
         </div>
       </footer>
+
     </div>
   );
 }
