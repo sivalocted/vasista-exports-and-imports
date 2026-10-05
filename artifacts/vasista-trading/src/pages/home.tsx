@@ -4,15 +4,25 @@ import { FaLinkedinIn } from "react-icons/fa";
 import {
   Mail, Phone, MapPin, Globe, ArrowRight,
   Award, Truck, Package, Search, CheckCircle2,
-  Clock, Ship, ChevronRight, Menu, X, Eye, Target, Play
+  Clock, Ship, ChevronRight, Menu, X, Eye, Target, Shield, Compass
 } from "lucide-react";
 
-import logoImg from "@assets/vasista-eng-logo.png";
-import about2Img from "@assets/about-2.png";
-import about3Img from "@assets/about-3.png";
-import slider1Img from "@assets/slider-1.png";
-import slider3Img from "@assets/slider-3.png";
-import slider4Img from "@assets/slider-4.png";
+import veEmblem from "@assets/ve-emblem.png";
+import heroOceanVessel from "@assets/hero-ocean-vessel.jpg";
+import heroPortTerminal from "@assets/hero-port-terminal.jpg";
+import heroCargoFreight from "@assets/hero-cargo-freight.jpg";
+import aboutVessel from "@assets/about-maritime-vessel.jpg";
+import corporateCardImg from "@assets/vasista_corporate_card.png";
+import commoditiesMatrixImg from "@assets/vasista_commodities_matrix.png";
+import offeringMinerals from "@assets/offering-minerals.jpg";
+import offeringEnergy from "@assets/offering-energy.jpg";
+import offeringChemicals from "@assets/offering-chemicals.jpg";
+import offeringSteel from "@assets/offering-steel.jpg";
+import offeringAgri from "@assets/offering-agri.jpg";
+import offeringLogistics from "@assets/offering-logistics.jpg";
+import articleOcean from "@assets/article-ocean.jpg";
+import articleLab from "@assets/article-lab.jpg";
+import articleTrade from "@assets/article-trade.jpg";
 
 // ── Animated Counter Component ───────────────────────────────────────────────
 function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -229,37 +239,37 @@ const offerings = [
     title: "Minerals & Flux Stone",
     category: "Mining & Heavy Industry",
     desc: "SMS & BF Grade Limestone, Calibrated Lump Iron Ore, Pellets, and high-purity Bauxite for blast furnaces and kiln feed.",
-    image: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=700&q=80",
+    image: offeringMinerals,
   },
   {
     title: "Energy & Carbon Fuels",
     category: "Power & Thermal Plants",
     desc: "Indonesian Steaming Coal (GAR 3800-5000), South African RB1/RB3, and Green Delayed Raw/Calcined Pet Coke.",
-    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=700&q=80",
+    image: offeringEnergy,
   },
   {
     title: "Chemicals & Fertilizer Inputs",
     category: "Agro & Industrial Chemistry",
     desc: "Technical Non-Coated & Prilled Agro Urea (46% Nitrogen), chemical inputs, and bulk fertilizer commodities.",
-    image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=700&q=80",
+    image: offeringChemicals,
   },
   {
     title: "Industrial Scrap & Steel",
     category: "Recycled Metallurgy",
     desc: "ISRI-standard HMS 1/2 (80:20) heavy melting scrap, plate & structural steel scrap loaded directly in 20ft containers.",
-    image: "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=700&q=80",
+    image: offeringSteel,
   },
   {
     title: "Agricultural Staples & Spices",
     category: "Global Food Supply",
     desc: "Stemless Guntur Teja Chilli, Salem/Nizamabad Turmeric (Curcumin >3%), cleaned Cumin, and export cashews (W180-W320).",
-    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80",
+    image: offeringAgri,
   },
   {
     title: "Port Logistics & Multimodal Freight",
     category: "Maritime Operations",
     desc: "Stevedoring at major Indian ports, customs house brokerage, railway rake allocation, and vessel chartering.",
-    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=700&q=80",
+    image: offeringLogistics,
   },
 ];
 
@@ -270,7 +280,7 @@ const articles = [
     month: "Mar",
     category: "Maritime Logistics",
     excerpt: "An in-depth analysis of ocean freight rates, vessel charter availability across the Indian Ocean, and bunker fuel impacts on bulk commodity shipping.",
-    image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=700&q=80"
+    image: articleOcean
   },
   {
     title: "SGS Chemical Assays: Ensuring Grade Compliance in Bulk Mineral Shipments",
@@ -278,7 +288,7 @@ const articles = [
     month: "Mar",
     category: "Quality Assurance",
     excerpt: "Best practices in pre-shipment sampling, draft surveys, and moisture determination for limestone and iron ore consignments at loading berths.",
-    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=80"
+    image: articleLab
   },
   {
     title: "Incoterms 2020 Masterclass: Navigating CIF vs FOB for Bulk Commodities",
@@ -286,7 +296,7 @@ const articles = [
     month: "Mar",
     category: "Commercial Contracts",
     excerpt: "Key considerations for buyers and sellers when allocating risk, insurance coverage, and demurrage liabilities in international trade contracts.",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=700&q=80"
+    image: articleTrade
   }
 ];
 
@@ -307,19 +317,19 @@ export default function Home() {
 
   const heroSlides = [
     {
-      img: slider1Img,
-      subtitle: "WE BRING COMMODITIES INTO REALITY",
+      img: heroOceanVessel,
+      subtitle: "GLOBAL COMMODITY SUPPLY CHAINS",
       title: "Trade Everything With Passion",
       desc: "Delivering reliable international commodity supply chains, verified SGS lab assays, and multimodal freight solutions with 13+ years of group experience."
     },
     {
-      img: slider3Img,
+      img: heroPortTerminal,
       subtitle: "GLOBAL LOGISTICS & PRECISION SOURCING",
       title: "Empowering Industries Worldwide",
       desc: "Direct allocation of high-purity minerals, thermal coals, pet coke, and agricultural staples connecting international ports to industrial plants."
     },
     {
-      img: slider4Img,
+      img: heroCargoFreight,
       subtitle: "VERIFIED QUALITY · ZERO DEVIATION",
       title: "Built On Trust, Quality & Commitment",
       desc: "Rigorous third-party sampling by SGS and Bureau Veritas, standardized Incoterms 2020, and dedicated trade desk execution."
@@ -386,7 +396,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white text-[#76787C] font-sans antialiased overflow-x-hidden selection:bg-[#FBD903] selection:text-[#13223C]">
 
-      {/* ── 1. TOP BAR (Mirroring vasistaengineering.com) ────────────────── */}
+      {/* ── 1. TOP BAR ──────────────────────────────────────────────────────── */}
       <header className="bg-[#13223C] text-white text-xs border-b border-white/10 hidden md:block">
         <div className="max-w-[1290px] mx-auto px-6 py-2.5 flex items-center justify-between">
           <div className="flex items-center gap-6 text-gray-300">
@@ -403,16 +413,16 @@ export default function Home() {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <span className="text-gray-400 text-[11px] uppercase tracking-wider mr-1">Follow Us:</span>
-              <a href="https://facebook.com/share/1HWeDcLf9Q" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors">
+              <a href="https://facebook.com/share/1HWeDcLf9Q" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors" title="Facebook">
                 <SiFacebook className="w-3 h-3" />
               </a>
-              <a href="https://instagram.com/vasista_trading_services" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors">
+              <a href="https://instagram.com/vasista_trading_services" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors" title="Instagram">
                 <SiInstagram className="w-3 h-3" />
               </a>
-              <a href="https://linkedin.com/company/vasista-trading-services-private-limited" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors">
+              <a href="https://linkedin.com/company/vasista-trading-services-private-limited" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors" title="LinkedIn">
                 <FaLinkedinIn className="w-3 h-3" />
               </a>
-              <a href="https://wa.me/918591938908" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors">
+              <a href="https://wa.me/918591938908" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FBD903] hover:text-[#13223C] transition-colors" title="WhatsApp">
                 <SiWhatsapp className="w-3 h-3" />
               </a>
             </div>
@@ -435,18 +445,18 @@ export default function Home() {
       {/* ── 2. STICKY MAIN NAVIGATION BAR ─────────────────────────────────── */}
       <nav className="sticky top-0 z-50 bg-white shadow-sm border-b border-[#DFE3EA]/80">
         <div className="max-w-[1290px] mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-3 group">
+          {/* Logo with Official Emblem */}
+          <a href="#" className="flex items-center gap-3.5 group">
             <img
-              src={logoImg}
-              alt="Vasista Trading Services"
-              className="h-12 w-auto object-contain transition-transform group-hover:scale-105"
+              src={veEmblem}
+              alt="Vasista Trading Services Emblem"
+              className="h-12 w-12 object-contain transition-transform group-hover:scale-105 drop-shadow-sm"
             />
             <div>
               <div className="font-heading text-2xl font-black text-[#13223C] tracking-tight leading-none">
                 VASISTA
               </div>
-              <div className="text-[10px] font-extrabold tracking-[0.2em] text-[#FBD903] uppercase">
+              <div className="text-[10px] font-extrabold tracking-[0.2em] text-[#FC811B] uppercase mt-0.5">
                 Trading Services Pvt. Ltd.
               </div>
             </div>
@@ -454,12 +464,13 @@ export default function Home() {
 
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center gap-8 font-bold text-[13px] tracking-wider uppercase text-[#13223C]">
-            <a href="#" className="hover:text-[#FBD903] transition-colors py-2">HOME</a>
-            <a href="#about" className="hover:text-[#FBD903] transition-colors py-2">ABOUT US</a>
-            <a href="#services" className="hover:text-[#FBD903] transition-colors py-2">OUR SERVICES</a>
-            <a href="#catalog" className="hover:text-[#FBD903] transition-colors py-2">B2B CATALOG</a>
-            <a href="#tracking" className="hover:text-[#FBD903] transition-colors py-2">FREIGHT TRACKING</a>
-            <a href="#contact" className="hover:text-[#FBD903] transition-colors py-2 text-[#13223C] relative">
+            <a href="#" className="hover:text-[#FC811B] transition-colors py-2">HOME</a>
+            <a href="#about" className="hover:text-[#FC811B] transition-colors py-2">ABOUT US</a>
+            <a href="#portfolio" className="hover:text-[#FC811B] transition-colors py-2">NETWORK</a>
+            <a href="#services" className="hover:text-[#FC811B] transition-colors py-2">OUR SERVICES</a>
+            <a href="#catalog" className="hover:text-[#FC811B] transition-colors py-2">B2B CATALOG</a>
+            <a href="#tracking" className="hover:text-[#FC811B] transition-colors py-2">FREIGHT TRACKING</a>
+            <a href="#contact" className="hover:text-[#FC811B] transition-colors py-2 text-[#13223C] relative">
               CONTACT
               <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#FBD903]" />
             </a>
@@ -479,7 +490,7 @@ export default function Home() {
           {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-[#13223C] hover:text-[#FBD903] focus:outline-none"
+            className="lg:hidden p-2 text-[#13223C] hover:text-[#FC811B] focus:outline-none"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
@@ -491,6 +502,7 @@ export default function Home() {
           <div className="lg:hidden bg-[#13223C] text-white border-t border-white/10 px-6 py-6 space-y-4">
             <a href="#" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase text-[#FBD903]">HOME</a>
             <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">ABOUT US</a>
+            <a href="#portfolio" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">NETWORK</a>
             <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">OUR SERVICES</a>
             <a href="#catalog" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">B2B CATALOG</a>
             <a href="#tracking" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">FREIGHT TRACKING</a>
@@ -508,7 +520,7 @@ export default function Home() {
         )}
       </nav>
 
-      {/* ── 3. HERO SLIDER SECTION (Matching Revolution Slider) ───────────── */}
+      {/* ── 3. HERO SLIDER SECTION ────────────────────────────────────────── */}
       <section className="relative min-h-[620px] lg:min-h-[720px] bg-[#101C30] overflow-hidden flex items-center">
         {heroSlides.map((slide, index) => (
           <div
@@ -526,8 +538,8 @@ export default function Home() {
           />
         ))}
 
-        {/* Industrial Dark Scrim Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#101C30]/90 via-[#101C30]/75 to-transparent" />
+        {/* Deep Maritime Gradient Scrim Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#101C30]/95 via-[#101C30]/80 to-transparent" />
 
         {/* Content Box */}
         <div className="max-w-[1290px] mx-auto px-6 py-20 relative z-10 w-full">
@@ -548,7 +560,7 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-4">
               <a
                 href="#about"
-                className="bg-[#FBD903] hover:bg-[#13223C] text-[#13223C] hover:text-white font-extrabold text-xs uppercase tracking-wider px-8 py-4 transition-all duration-300 shadow-lg flex items-center gap-2"
+                className="bg-[#FBD903] hover:bg-white text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-8 py-4 transition-all duration-300 shadow-lg flex items-center gap-2"
               >
                 <span>DISCOVER MORE</span>
                 <ArrowRight className="w-4 h-4" />
@@ -588,44 +600,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 4. ABOUT COMPANY SECTION (Mirroring Elementor Section 3dc97ad) ─ */}
+      {/* ── 4. ABOUT COMPANY SECTION ──────────────────────────────────────── */}
       <section id="about" className="py-24 bg-white relative overflow-hidden">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-            {/* Left Column: Overlapping Photography */}
+            {/* Left Column: Official Corporate Presentation & Overlaid Card */}
             <div className="lg:col-span-6 relative">
-              <div className="relative mx-auto max-w-[480px]">
-                <div className="relative z-10 overflow-hidden shadow-xl">
+              <div className="relative mx-auto max-w-[500px]">
+                <div className="relative z-10 overflow-hidden shadow-2xl border-4 border-white">
                   <img
-                    src={about2Img}
-                    alt="Vasista Operations"
+                    src={aboutVessel}
+                    alt="Vasista Maritime Shipping Logistics"
                     className="w-full h-[480px] object-cover object-center"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#101C30]/85 via-transparent to-transparent" />
+                  <div className="absolute bottom-6 left-6 right-6 text-white">
+                    <div className="text-[11px] font-black uppercase tracking-widest text-[#FBD903] mb-1">
+                      MARITIME BULK & CONTAINER CORRIDORS
+                    </div>
+                    <div className="text-xs font-medium text-gray-200">
+                      Connecting Bay of Bengal, Arabian Sea & International Ports
+                    </div>
+                  </div>
                 </div>
 
-                <div className="absolute -bottom-10 -right-4 sm:-right-8 z-20 w-64 sm:w-72 shadow-2xl">
+                {/* Overlaid Official Corporate Credential Card */}
+                <div className="absolute -bottom-10 -right-4 sm:-right-8 z-20 w-60 sm:w-68 shadow-2xl">
                   <img
-                    src={about3Img}
-                    alt="Vasista Engineering and Trade"
-                    className="w-full h-auto object-cover border-[12px] border-white shadow-2xl"
+                    src={corporateCardImg}
+                    alt="Vasista Trading Services Corporate Certificate"
+                    className="w-full h-auto object-cover border-[6px] border-white shadow-2xl"
                   />
                 </div>
 
-                <div className="absolute top-8 left-4 z-30 bg-[#FBD903] text-[#13223C] p-4 text-center shadow-lg border-2 border-white">
+                <div className="absolute top-6 left-6 z-30 bg-[#FBD903] text-[#13223C] p-4 text-center shadow-lg border-2 border-white">
                   <div className="font-heading text-3xl font-extrabold leading-none">13+</div>
                   <div className="text-[10px] font-black uppercase tracking-wider mt-0.5">Years Experience</div>
-                </div>
-
-                <div className="absolute -bottom-6 left-0 z-30 bg-[#13223C] text-white px-6 py-3 font-extrabold text-xs uppercase tracking-wider shadow-lg border-l-4 border-[#FC811B]">
-                  We bring commodities into reality
                 </div>
 
                 <div className="absolute -left-6 top-1/4 w-1.5 h-32 bg-[#FC811B] hidden sm:block" />
               </div>
             </div>
 
-            {/* Right Column: Mission, Vision, and Text */}
+            {/* Right Column: Mission, Vision, and Credentials */}
             <div className="lg:col-span-6 space-y-6 pt-6 lg:pt-0">
               <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase">
                 <span className="w-8 h-0.5 bg-[#FBD903]" />
@@ -637,7 +655,7 @@ export default function Home() {
               </h2>
 
               <p className="text-[#76787C] leading-relaxed text-sm sm:text-base">
-                Vasista Trading Services Private Limited is a premier international commodity trading and supply chain organization. With over 13 years of core group background spanning industrial engineering, infrastructure, and multimodal logistics, we connect major global mines and producers directly to steel plants, thermal power units, chemical refineries, and agro processors.
+                Vasista Trading Services Private Limited is a premier international commodity trading and multimodal supply chain organization. Backed by 13+ years of group experience across core engineering, maritime logistics, and infrastructure, we connect premier global mines and certified producers directly with steel plants, thermal power units, chemical refineries, and agro processors.
               </p>
 
               <div className="space-y-4 pt-2">
@@ -650,7 +668,7 @@ export default function Home() {
                       <Eye className="w-5 h-5" />
                     </div>
                     <p className="text-sm text-[#76787C] leading-relaxed">
-                      To establish ourselves as the global benchmark for excellence, transparency, and dependability in international commodity trade and freight solutions.
+                      To establish ourselves as the global benchmark for excellence, transparency, and dependability in international commodity trade, verified laboratory compliance, and freight solutions.
                     </p>
                   </div>
                 </div>
@@ -664,13 +682,13 @@ export default function Home() {
                       <Target className="w-5 h-5" />
                     </div>
                     <p className="text-sm text-[#76787C] leading-relaxed">
-                      To continuously embrace modern trade technologies, enforce strict laboratory quality compliance, and deliver best-in-class solutions, empowering our partners to thrive in an ever-evolving world.
+                      To continuously embrace modern trade technologies, enforce strict laboratory quality compliance, and deliver best-in-class supply chain execution, empowering our partners to thrive in an ever-evolving world.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 flex items-center gap-6">
+              <div className="pt-4 flex flex-wrap items-center gap-6">
                 <a
                   href="#contact"
                   className="bg-[#13223C] hover:bg-[#FBD903] text-white hover:text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-8 py-4 transition-all duration-300 shadow-md inline-flex items-center gap-2"
@@ -679,8 +697,8 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4" />
                 </a>
 
-                <div className="text-xs font-mono text-[#13223C] font-bold">
-                  GSTIN: 37AALCV9169R1ZY
+                <div className="text-xs font-mono text-[#13223C] font-bold bg-[#EFF1F5] px-4 py-3 border border-[#DFE3EA]">
+                  GSTIN: <span className="text-[#FC811B]">37AALCV9169R1ZY</span>
                 </div>
               </div>
             </div>
@@ -689,7 +707,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 5. COUNTER BAND / ACHIEVEMENTS (Elementor Section 9044d5b) ────── */}
+      {/* ── 5. COUNTER BAND / ACHIEVEMENTS ─────────────────────────────────── */}
       <section className="py-16 bg-[#EFF1F5] border-y border-[#DFE3EA]">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -752,7 +770,56 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 6. "WHAT WE’RE OFFERING" (Services & Commodities Grid) ────────── */}
+      {/* ── 6. OFFICIAL COMMODITIES MATRIX & OPERATIONAL FOOTPRINT ────────── */}
+      <section id="portfolio" className="py-24 bg-[#101C30] text-white relative overflow-hidden">
+        <div className="max-w-[1290px] mx-auto px-6 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-3 text-[#FBD903] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+              <span>OFFICIAL TRADING NETWORK</span>
+              <span className="w-8 h-0.5 bg-[#FBD903]" />
+            </div>
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
+              Our Comprehensive Global Trade Matrix
+            </h2>
+            <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+              Officially chartered commodity matrix covering 16 critical trade categories across key operational states: Andhra Pradesh, Maharashtra, Gujarat, Odisha, Telangana, and Karnataka.
+            </p>
+          </div>
+
+          {/* High-Resolution Commodities Matrix Graphic */}
+          <div className="bg-[#13223C] border border-white/15 p-4 sm:p-8 shadow-2xl">
+            <img
+              src={commoditiesMatrixImg}
+              alt="Vasista Trading Services Commodities Matrix and Operational States"
+              className="w-full h-auto object-contain mx-auto shadow-xl"
+            />
+          </div>
+
+          {/* Quick Matrix Action Bar */}
+          <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 bg-white/5 border border-white/10 p-6">
+            <div className="flex items-center gap-4 text-xs text-gray-300">
+              <div className="w-10 h-10 rounded-none bg-[#FBD903] text-[#13223C] flex items-center justify-center flex-shrink-0 font-bold">
+                <Shield className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="font-bold text-white text-sm">Verified Corporate Trading House</div>
+                <div>GSTIN: <span className="font-mono text-[#FBD903]">37AALCV9169R1ZY</span> · All shipments backed by third-party inspection (SGS/BV).</div>
+              </div>
+            </div>
+
+            <a
+              href="#contact"
+              className="bg-[#FBD903] hover:bg-white text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-8 py-3.5 transition-colors inline-flex items-center gap-2 shadow-lg flex-shrink-0"
+            >
+              <span>REQUEST MATRIX QUOTATION</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. "WHAT WE’RE OFFERING" (Services Grid) ───────────────────────── */}
       <section id="services" className="py-24 bg-white relative">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -815,12 +882,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 7. "WHAT ELSE WE DO" (Elementor Section 8243a87 - Navy Dark) ─── */}
+      {/* ── 8. "WHAT ELSE WE DO" (Core Pillars) ────────────────────────────── */}
       <section className="py-24 bg-[#101C30] text-white relative overflow-hidden">
         <div className="max-w-[1290px] mx-auto px-6 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="w-16 h-16 rounded-full bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-6 shadow-xl">
-              <Play className="w-6 h-6 ml-0.5" />
+              <Shield className="w-7 h-7" />
             </div>
 
             <div className="inline-flex items-center gap-3 text-[#FBD903] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
@@ -902,7 +969,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 8. FREIGHT TRACKING SYSTEM TERMINAL ───────────────────────────── */}
+      {/* ── 9. FREIGHT TRACKING SYSTEM TERMINAL ───────────────────────────── */}
       <section id="tracking" className="py-24 bg-white border-t border-[#DFE3EA]">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -1029,7 +1096,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 9. GLOBAL B2B PRODUCT CATALOG (HS Codes, Origins, MOQs) ───────── */}
+      {/* ── 10. GLOBAL B2B PRODUCT CATALOG ─────────────────────────────────── */}
       <section id="catalog" className="py-24 bg-[#EFF1F5]">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -1112,7 +1179,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 10. SIMPLE & CLEAN CONTACT SECTION (Mirroring screenshot & vasistaengineering.com/contact) ── */}
+      {/* ── 11. SIMPLE & CLEAN CONTACT SECTION ─────────────────────────────── */}
       <section id="contact" className="py-24 bg-white border-t border-[#DFE3EA]">
         <div className="max-w-[900px] mx-auto px-6">
           <div className="text-center mb-12">
@@ -1159,7 +1226,7 @@ export default function Home() {
 
             {formSubmitted && (
               <div className="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold text-center">
-                ✓ Thank you! Your message has been sent successfully. Our team will contact you shortly.
+                ✓ Thank you! Your message has been sent successfully. Our trade desk will contact you shortly.
               </div>
             )}
 
@@ -1181,7 +1248,7 @@ export default function Home() {
             </div>
           </form>
 
-          {/* Contact Coordinates / Direct Cards */}
+          {/* Contact Coordinates */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 pt-12 border-t border-[#DFE3EA]">
             <a
               href="tel:+918591938908"
@@ -1228,7 +1295,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 11. BLOG POSTS / INSIGHTS (Elementor Section 23ed9af) ─────────── */}
+      {/* ── 12. BLOG POSTS / INSIGHTS ─────────────────────────────────────── */}
       <section id="news" className="py-24 bg-[#EFF1F5]">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -1286,40 +1353,40 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 12. OFFICIAL FOOTER (Mirroring vasistaengineering.com) ────────── */}
+      {/* ── 13. OFFICIAL FOOTER ────────────────────────────────────────────── */}
       <footer className="bg-[#101C30] text-gray-300 pt-20 pb-10 border-t border-white/10">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/10">
 
             {/* Col 1: Brand & Bio */}
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <img src={logoImg} alt="Vasista Logo" className="h-10 w-auto brightness-110" />
+              <div className="flex items-center gap-3.5 mb-6">
+                <img src={veEmblem} alt="Vasista Emblem" className="h-11 w-11 object-contain drop-shadow" />
                 <div>
                   <div className="font-heading text-xl font-black text-white leading-none">VASISTA</div>
-                  <div className="text-[9px] uppercase tracking-widest text-[#FBD903] font-extrabold">Trading Services Pvt. Ltd.</div>
+                  <div className="text-[9px] uppercase tracking-widest text-[#FBD903] font-extrabold mt-0.5">Trading Services Pvt. Ltd.</div>
                 </div>
               </div>
               <p className="text-xs text-gray-400 leading-relaxed mb-6">
                 Delivering reliable commodity trading, verified SGS assays, and multimodal freight solutions across minerals, energy fuels, and agro commodities. GSTIN: 37AALCV9169R1ZY.
               </p>
               <div className="flex items-center gap-2">
-                <a href="https://facebook.com/share/1HWeDcLf9Q" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors">
+                <a href="https://facebook.com/share/1HWeDcLf9Q" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors" title="Facebook">
                   <SiFacebook className="w-3.5 h-3.5" />
                 </a>
-                <a href="https://instagram.com/vasista_trading_services" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors">
+                <a href="https://instagram.com/vasista_trading_services" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors" title="Instagram">
                   <SiInstagram className="w-3.5 h-3.5" />
                 </a>
-                <a href="https://linkedin.com/company/vasista-trading-services-private-limited" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors">
+                <a href="https://linkedin.com/company/vasista-trading-services-private-limited" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors" title="LinkedIn">
                   <FaLinkedinIn className="w-3.5 h-3.5" />
                 </a>
-                <a href="https://wa.me/918591938908" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors">
+                <a href="https://wa.me/918591938908" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FBD903] hover:text-[#13223C] flex items-center justify-center transition-colors" title="WhatsApp">
                   <SiWhatsapp className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
 
-            {/* Col 2: Quick Links */}
+            {/* Col 2: Navigation */}
             <div>
               <div className="font-heading text-base font-extrabold text-white uppercase tracking-wider mb-6 pb-2 border-b border-[#FBD903] inline-block">
                 Navigation
@@ -1327,6 +1394,7 @@ export default function Home() {
               <ul className="space-y-3 text-xs uppercase tracking-wider font-bold">
                 <li><a href="#" className="hover:text-[#FBD903] transition-colors">Home</a></li>
                 <li><a href="#about" className="hover:text-[#FBD903] transition-colors">About Us</a></li>
+                <li><a href="#portfolio" className="hover:text-[#FBD903] transition-colors">Trading Network</a></li>
                 <li><a href="#services" className="hover:text-[#FBD903] transition-colors">Our Services</a></li>
                 <li><a href="#catalog" className="hover:text-[#FBD903] transition-colors">B2B Product Matrix</a></li>
                 <li><a href="#tracking" className="hover:text-[#FBD903] transition-colors">Freight Tracking</a></li>
@@ -1361,7 +1429,7 @@ export default function Home() {
                 Newsletter
               </div>
               <p className="text-xs text-gray-400 mb-4">
-                Subscribe for weekly benchmark commodity pricing, freight indices, and port updates.
+                Subscribe for benchmark commodity pricing, freight indices, and port updates.
               </p>
               <form onSubmit={(e) => { e.preventDefault(); alert("Subscribed successfully!"); }} className="flex">
                 <input
