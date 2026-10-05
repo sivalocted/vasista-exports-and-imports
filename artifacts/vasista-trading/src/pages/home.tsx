@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
 import { SiFacebook, SiInstagram, SiWhatsapp } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa";
 import {
   Mail, Phone, MapPin, Globe, ArrowRight,
-  TrendingUp, ShieldCheck, Shield, Zap, Award,
-  Truck, Users, Package, Search, CheckCircle2,
-  Clock, Compass, Anchor, Ship, ChevronRight,
-  Menu, X, Eye, Target, Play, ChevronLeft
+  Award, Truck, Package, Search, CheckCircle2,
+  Clock, Ship, ChevronRight, Menu, X, Eye, Target, Play
 } from "lucide-react";
 
 import logoImg from "@assets/vasista-eng-logo.png";
@@ -21,10 +18,8 @@ import slider4Img from "@assets/slider-4.png";
 function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
 
   useEffect(() => {
-    if (!inView) return;
     let start = 0;
     const step = Math.ceil(target / 50) || 1;
     const interval = setInterval(() => {
@@ -37,7 +32,7 @@ function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
       }
     }, 25);
     return () => clearInterval(interval);
-  }, [inView, target]);
+  }, [target]);
 
   return <span ref={ref}>{count}{suffix}</span>;
 }
@@ -304,17 +299,11 @@ export default function Home() {
   const [trackingInput, setTrackingInput] = useState("VAS-IN-849201");
   const [activeShipmentId, setActiveShipmentId] = useState("VAS-IN-849201");
 
-  // RFQ Form State
-  const [rfqMode, setRfqMode] = useState<"BUYER" | "SUPPLIER">("BUYER");
-  const [selectedCommodity, setSelectedCommodity] = useState("Limestone");
-  const [rfqVolume, setRfqVolume] = useState("500 MT");
-  const [rfqIncoterm, setRfqIncoterm] = useState("CIF");
-  const [rfqPort, setRfqPort] = useState("Visakhapatnam Port (INVTZ)");
-  const [rfqSpecs, setRfqSpecs] = useState("SMS Grade, CaCO3 > 95%, Size 10-40mm");
-  const [rfqName, setRfqName] = useState("");
-  const [rfqCompany, setRfqCompany] = useState("");
-  const [rfqContact, setRfqContact] = useState("");
-  const [rfqSubmitted, setRfqSubmitted] = useState(false);
+  // Simple & Clean Contact Form State
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const heroSlides = [
     {
@@ -363,34 +352,31 @@ export default function Home() {
     }
   };
 
-  const handleRfqCommodityChange = (name: string) => {
-    setSelectedCommodity(name);
-    const prod = B2B_PRODUCTS.find(p => p.name.toLowerCase().includes(name.toLowerCase()));
-    if (prod) {
-      setRfqSpecs(`${prod.specs} | Grades: ${prod.grades}`);
-    }
-  };
-
-  const handleRfqSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setRfqSubmitted(true);
-    setTimeout(() => setRfqSubmitted(false), 5000);
+    setFormSubmitted(true);
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setContactName("");
+      setContactEmail("");
+      setContactMessage("");
+    }, 5000);
   };
 
-  const handleWhatsAppRfq = () => {
+  const handleWhatsAppContact = () => {
     const text = encodeURIComponent(
-      `*NEW INSTITUTIONAL TRADE RFQ (${rfqMode})*\n` +
-      `• Organization: Vasista Trading Services Private Limited\n` +
-      `• Representative: ${rfqName || "Institutional Buyer"} (${rfqCompany || "Corporate Client"})\n` +
-      `• Commodity: ${selectedCommodity}\n` +
-      `• Required Volume: ${rfqVolume}\n` +
-      `• Target Incoterm: ${rfqIncoterm}\n` +
-      `• Destination Port: ${rfqPort}\n` +
-      `• Specifications: ${rfqSpecs}\n` +
-      `• Contact: ${rfqContact}\n\n` +
-      `Please provide current CIF/FOB benchmark quotation and availability.`
+      `Hello Vasista Team,\n` +
+      `• Name: ${contactName || "Client"}\n` +
+      `• Email: ${contactEmail || "Not provided"}\n` +
+      `• Inquiry: ${contactMessage || "I would like to inquire about your trading services and commodities."}`
     );
     window.open(`https://wa.me/918591938908?text=${text}`, "_blank");
+  };
+
+  const prefillInquiry = (subject: string) => {
+    setContactMessage(`Hello, I would like to request quotation and details regarding: ${subject}.`);
+    const el = document.getElementById("contact");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   const filteredProducts = activeCategory === "All"
@@ -468,22 +454,21 @@ export default function Home() {
 
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center gap-8 font-bold text-[13px] tracking-wider uppercase text-[#13223C]">
-            <a href="#" className="text-[#FBD903] hover:text-[#FBD903] transition-colors relative py-2">
-              HOME
+            <a href="#" className="hover:text-[#FBD903] transition-colors py-2">HOME</a>
+            <a href="#about" className="hover:text-[#FBD903] transition-colors py-2">ABOUT US</a>
+            <a href="#services" className="hover:text-[#FBD903] transition-colors py-2">OUR SERVICES</a>
+            <a href="#catalog" className="hover:text-[#FBD903] transition-colors py-2">B2B CATALOG</a>
+            <a href="#tracking" className="hover:text-[#FBD903] transition-colors py-2">FREIGHT TRACKING</a>
+            <a href="#contact" className="hover:text-[#FBD903] transition-colors py-2 text-[#13223C] relative">
+              CONTACT
               <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#FBD903]" />
             </a>
-            <a href="#about" className="hover:text-[#FBD903] transition-colors py-2">ABOUT US</a>
-            <a href="#services" className="hover:text-[#FBD903] transition-colors py-2">SERVICES</a>
-            <a href="#tracking" className="hover:text-[#FBD903] transition-colors py-2">FREIGHT TRACKING</a>
-            <a href="#catalog" className="hover:text-[#FBD903] transition-colors py-2">B2B CATALOG</a>
-            <a href="#news" className="hover:text-[#FBD903] transition-colors py-2">INSIGHTS</a>
-            <a href="#contact" className="hover:text-[#FBD903] transition-colors py-2">CONTACT</a>
           </div>
 
           {/* Right Action Button */}
           <div className="hidden md:flex items-center gap-4">
             <a
-              href="#rfq"
+              href="#contact"
               className="inline-flex items-center gap-2 bg-[#FBD903] hover:bg-[#13223C] text-[#13223C] hover:text-white font-extrabold text-xs uppercase tracking-wider px-7 py-3.5 rounded-none transition-all duration-300 shadow-sm"
             >
               <span>GET A FREE QUOTE</span>
@@ -506,14 +491,13 @@ export default function Home() {
           <div className="lg:hidden bg-[#13223C] text-white border-t border-white/10 px-6 py-6 space-y-4">
             <a href="#" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase text-[#FBD903]">HOME</a>
             <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">ABOUT US</a>
-            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">SERVICES</a>
-            <a href="#tracking" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">FREIGHT TRACKING</a>
+            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">OUR SERVICES</a>
             <a href="#catalog" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">B2B CATALOG</a>
-            <a href="#news" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">INSIGHTS</a>
+            <a href="#tracking" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">FREIGHT TRACKING</a>
             <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block font-bold text-sm tracking-wider uppercase hover:text-[#FBD903]">CONTACT</a>
             <div className="pt-2">
               <a
-                href="#rfq"
+                href="#contact"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block text-center bg-[#FBD903] text-[#13223C] font-extrabold text-xs uppercase tracking-wider py-3"
               >
@@ -526,7 +510,6 @@ export default function Home() {
 
       {/* ── 3. HERO SLIDER SECTION (Matching Revolution Slider) ───────────── */}
       <section className="relative min-h-[620px] lg:min-h-[720px] bg-[#101C30] overflow-hidden flex items-center">
-        {/* Slide Background Images */}
         {heroSlides.map((slide, index) => (
           <div
             key={index}
@@ -549,23 +532,19 @@ export default function Home() {
         {/* Content Box */}
         <div className="max-w-[1290px] mx-auto px-6 py-20 relative z-10 w-full">
           <div className="max-w-2xl text-white">
-            {/* Signature Eyebrow */}
             <div className="inline-flex items-center gap-3 text-[#FBD903] font-extrabold text-xs tracking-[0.25em] uppercase mb-4">
               <span className="w-8 h-0.5 bg-[#FBD903]" />
               <span>{heroSlides[activeSlide].subtitle}</span>
             </div>
 
-            {/* Giant Heading */}
             <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-[1.08] mb-6">
               {heroSlides[activeSlide].title}
             </h1>
 
-            {/* Sub-text */}
             <p className="text-gray-200 text-base sm:text-lg leading-relaxed mb-8 max-w-xl font-medium">
               {heroSlides[activeSlide].desc}
             </p>
 
-            {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4">
               <a
                 href="#about"
@@ -586,7 +565,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Floating 13+ Years Experience Badge (Real Site Marker) */}
+        {/* Floating 13+ Years Experience Badge */}
         <div className="hidden md:flex absolute bottom-12 right-12 lg:right-24 z-20 bg-[#FBD903] text-[#13223C] p-6 shadow-2xl flex-col items-center justify-center text-center w-48 border-4 border-white/20">
           <span className="font-heading text-5xl font-extrabold leading-none">13+</span>
           <span className="text-xs font-black uppercase tracking-wider mt-1 text-[#13223C]">
@@ -594,7 +573,7 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Slider Navigation Arrows & Dots */}
+        {/* Slider Navigation Dots */}
         <div className="absolute bottom-6 left-6 z-20 flex items-center gap-2">
           {heroSlides.map((_, idx) => (
             <button
@@ -614,11 +593,9 @@ export default function Home() {
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-            {/* Left Column: Overlapping Real Site Photography & Badges */}
+            {/* Left Column: Overlapping Photography */}
             <div className="lg:col-span-6 relative">
               <div className="relative mx-auto max-w-[480px]">
-
-                {/* Base Image (about-2.png) */}
                 <div className="relative z-10 overflow-hidden shadow-xl">
                   <img
                     src={about2Img}
@@ -627,7 +604,6 @@ export default function Home() {
                   />
                 </div>
 
-                {/* Overlapping Inset Image (about-3.png) with 15px White Border */}
                 <div className="absolute -bottom-10 -right-4 sm:-right-8 z-20 w-64 sm:w-72 shadow-2xl">
                   <img
                     src={about3Img}
@@ -636,18 +612,15 @@ export default function Home() {
                   />
                 </div>
 
-                {/* Floating Experience Badge */}
                 <div className="absolute top-8 left-4 z-30 bg-[#FBD903] text-[#13223C] p-4 text-center shadow-lg border-2 border-white">
                   <div className="font-heading text-3xl font-extrabold leading-none">13+</div>
                   <div className="text-[10px] font-black uppercase tracking-wider mt-0.5">Years Experience</div>
                 </div>
 
-                {/* Dark Navy Banner at Bottom */}
                 <div className="absolute -bottom-6 left-0 z-30 bg-[#13223C] text-white px-6 py-3 font-extrabold text-xs uppercase tracking-wider shadow-lg border-l-4 border-[#FC811B]">
                   We bring commodities into reality
                 </div>
 
-                {/* Vertical Orange Line Marker */}
                 <div className="absolute -left-6 top-1/4 w-1.5 h-32 bg-[#FC811B] hidden sm:block" />
               </div>
             </div>
@@ -668,7 +641,6 @@ export default function Home() {
               </p>
 
               <div className="space-y-4 pt-2">
-                {/* Vision Box */}
                 <div className="border-b border-[#DFE3EA] pb-4">
                   <div className="font-heading text-lg font-extrabold text-[#13223C] uppercase mb-2">
                     OUR VISION
@@ -683,7 +655,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Mission Box */}
                 <div className="border-b border-[#DFE3EA] pb-4">
                   <div className="font-heading text-lg font-extrabold text-[#13223C] uppercase mb-2">
                     OUR MISSION
@@ -701,10 +672,10 @@ export default function Home() {
 
               <div className="pt-4 flex items-center gap-6">
                 <a
-                  href="#catalog"
+                  href="#contact"
                   className="bg-[#13223C] hover:bg-[#FBD903] text-white hover:text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-8 py-4 transition-all duration-300 shadow-md inline-flex items-center gap-2"
                 >
-                  <span>EXPLORE COMMODITIES</span>
+                  <span>WRITE OUR TEAM</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
 
@@ -722,7 +693,6 @@ export default function Home() {
       <section className="py-16 bg-[#EFF1F5] border-y border-[#DFE3EA]">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-
             <div className="bg-white p-8 border-b-4 border-[#FBD903] shadow-sm flex items-center gap-5 group hover:shadow-md transition-shadow">
               <div className="w-14 h-14 bg-[#13223C] group-hover:bg-[#FBD903] text-[#FBD903] group-hover:text-[#13223C] flex items-center justify-center transition-colors">
                 <Package className="w-7 h-7" />
@@ -778,7 +748,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
@@ -804,7 +773,6 @@ export default function Home() {
                 className="bg-[#EFF1F5] group overflow-hidden border border-[#DFE3EA] hover:border-[#FBD903] transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  {/* Photo with hover zoom */}
                   <div className="relative h-56 overflow-hidden">
                     <img
                       src={item.image}
@@ -830,14 +798,13 @@ export default function Home() {
                 </div>
 
                 <div className="p-6 pt-0 border-t border-[#DFE3EA]/50 flex items-center justify-between mt-4">
-                  <a
-                    href="#rfq"
-                    onClick={() => handleRfqCommodityChange(item.title)}
+                  <button
+                    onClick={() => prefillInquiry(item.title)}
                     className="text-xs uppercase font-extrabold tracking-wider text-[#13223C] group-hover:text-[#FC811B] transition-colors flex items-center gap-1.5"
                   >
-                    <span>Request Quotation</span>
+                    <span>Inquire Now</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                  </button>
                   <div className="w-8 h-8 rounded-full bg-white group-hover:bg-[#FBD903] text-[#13223C] flex items-center justify-center transition-colors shadow-sm">
                     <ChevronRight className="w-4 h-4" />
                   </div>
@@ -925,10 +892,10 @@ export default function Home() {
 
           <div className="mt-12 text-center">
             <a
-              href="#rfq"
+              href="#contact"
               className="inline-flex items-center gap-2 bg-[#FBD903] hover:bg-white text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-9 py-4 transition-all duration-300 shadow-xl"
             >
-              <span>REQUEST AN INSTITUTIONAL QUOTE</span>
+              <span>CONNECT WITH OUR TRADE DESK</span>
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>
@@ -951,7 +918,6 @@ export default function Home() {
               Live consignment status handling container numbers, ocean carriers, and destination gateway ports.
             </p>
 
-            {/* Quick Demo Buttons */}
             <div className="flex flex-wrap items-center justify-center gap-2.5 mt-6">
               <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Sample Consignments:</span>
               {Object.keys(SAMPLE_SHIPMENTS).map(id => (
@@ -972,7 +938,6 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Search Input */}
             <form onSubmit={handleTrackingSearch} className="max-w-lg mx-auto mt-6 flex gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -993,7 +958,6 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Active Consignment Card */}
           <div className="bg-[#EFF1F5] border border-[#DFE3EA] p-8 md:p-10 shadow-sm">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-[#DFE3EA] mb-8">
               <div>
@@ -1024,7 +988,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Milestones Timeline */}
             <div className="space-y-6">
               {activeShipment.milestones.map((m, idx) => (
                 <div key={idx} className="relative flex items-start gap-4">
@@ -1082,7 +1045,6 @@ export default function Home() {
               Harmonized Tariff classifications, verified origins, chemical assay specs, and minimum order quantities.
             </p>
 
-            {/* Category Tabs */}
             <div className="flex flex-wrap justify-center gap-2 mt-8">
               {["All", "Minerals & Metals", "Energy & Carbon", "Chemicals & Inputs", "Food & Agri"].map(cat => (
                 <button
@@ -1136,13 +1098,12 @@ export default function Home() {
                 </div>
 
                 <div className="pt-4 border-t border-[#DFE3EA] flex items-center justify-between">
-                  <a
-                    href="#rfq"
-                    onClick={() => handleRfqCommodityChange(p.name)}
+                  <button
+                    onClick={() => prefillInquiry(`${p.name} (${p.hsCode})`)}
                     className="text-xs text-[#13223C] hover:text-[#FC811B] font-extrabold flex items-center gap-1 uppercase tracking-wider"
                   >
-                    Quote Desk <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                    Inquire Details <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                   <span className="text-[10px] text-gray-400 font-mono">SGS / BV Verified</span>
                 </div>
               </div>
@@ -1151,198 +1112,118 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 10. REQUEST FOR QUOTE (RFQ) FORM ENGINE ───────────────────────── */}
-      <section id="rfq" className="py-24 bg-white border-t border-[#DFE3EA]">
-        <div className="max-w-[960px] mx-auto px-6">
-          <div className="text-center max-w-xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
-              <span className="w-8 h-0.5 bg-[#FBD903]" />
-              <span>DIRECT COMMERCIAL DESK</span>
-              <span className="w-8 h-0.5 bg-[#FBD903]" />
+      {/* ── 10. SIMPLE & CLEAN CONTACT SECTION (Mirroring screenshot & vasistaengineering.com/contact) ── */}
+      <section id="contact" className="py-24 bg-white border-t border-[#DFE3EA]">
+        <div className="max-w-[900px] mx-auto px-6">
+          <div className="text-center mb-12">
+            <div className="inline-block text-center mb-2">
+              <span className="text-sm font-semibold text-[#76787C] tracking-wide block">
+                Contact With Us
+              </span>
+              <div className="w-10 h-0.5 bg-[#FBD903] mx-auto mt-1" />
             </div>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
-              Request for Quote (RFQ) Engine
+
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight mt-3">
+              Feel free to write our team anytime
             </h2>
-            <p className="text-[#76787C] text-sm mt-3">
-              Submit your commodity trade parameters for instant desk evaluation, CIF/FOB pricing, and specification alignment.
-            </p>
           </div>
 
-          <div className="bg-[#EFF1F5] border border-[#DFE3EA] p-8 md:p-12 shadow-sm">
-            {/* Mode Switcher */}
-            <div className="flex bg-white p-1 mb-8 max-w-sm mx-auto border border-[#DFE3EA]">
-              <button
-                type="button"
-                onClick={() => setRfqMode("BUYER")}
-                className={`flex-1 py-2.5 text-xs font-extrabold tracking-wider uppercase transition-all ${
-                  rfqMode === "BUYER" ? "bg-[#13223C] text-[#FBD903] shadow-sm" : "text-[#76787C] hover:text-[#13223C]"
-                }`}
-              >
-                Institutional Buyer
-              </button>
-              <button
-                type="button"
-                onClick={() => setRfqMode("SUPPLIER")}
-                className={`flex-1 py-2.5 text-xs font-extrabold tracking-wider uppercase transition-all ${
-                  rfqMode === "SUPPLIER" ? "bg-[#13223C] text-[#FBD903] shadow-sm" : "text-[#76787C] hover:text-[#13223C]"
-                }`}
-              >
-                Supplier / Mine Allocation
-              </button>
+          <form onSubmit={handleContactSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <input
+                type="text"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                placeholder="Your Name"
+                required
+                className="w-full bg-[#EFF1F5] border-0 px-6 py-4 text-sm text-[#13223C] placeholder-[#76787C] focus:outline-none focus:ring-2 focus:ring-[#FBD903] transition-all"
+              />
+              <input
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="Email Address"
+                required
+                className="w-full bg-[#EFF1F5] border-0 px-6 py-4 text-sm text-[#13223C] placeholder-[#76787C] focus:outline-none focus:ring-2 focus:ring-[#FBD903] transition-all"
+              />
             </div>
 
-            <form onSubmit={handleRfqSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
-                    Commodity Selection
-                  </label>
-                  <select
-                    value={selectedCommodity}
-                    onChange={(e) => handleRfqCommodityChange(e.target.value)}
-                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
-                  >
-                    {B2B_PRODUCTS.map(p => (
-                      <option key={p.id} value={p.name}>
-                        {p.name} ({p.hsCode})
-                      </option>
-                    ))}
-                    <option value="Custom Mineral/Commodity">Custom Mineral/Commodity Requirement</option>
-                  </select>
-                </div>
+            <textarea
+              rows={6}
+              value={contactMessage}
+              onChange={(e) => setContactMessage(e.target.value)}
+              placeholder="Write a Message"
+              required
+              className="w-full bg-[#EFF1F5] border-0 px-6 py-4 text-sm text-[#13223C] placeholder-[#76787C] focus:outline-none focus:ring-2 focus:ring-[#FBD903] transition-all resize-y"
+            />
 
-                <div>
-                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
-                    Target Volume / Lot Size
-                  </label>
-                  <input
-                    type="text"
-                    value={rfqVolume}
-                    onChange={(e) => setRfqVolume(e.target.value)}
-                    placeholder="e.g. 500 MT, 10x20ft FCL, Bulk Vessel"
-                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
-                    required
-                  />
-                </div>
+            {formSubmitted && (
+              <div className="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold text-center">
+                ✓ Thank you! Your message has been sent successfully. Our team will contact you shortly.
               </div>
+            )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
-                    Incoterms 2020 Preference
-                  </label>
-                  <select
-                    value={rfqIncoterm}
-                    onChange={(e) => setRfqIncoterm(e.target.value)}
-                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
-                  >
-                    <option value="CIF">CIF — Cost, Insurance & Freight (Discharge Port)</option>
-                    <option value="FOB">FOB — Free on Board (Loading Port)</option>
-                    <option value="CFR">CFR — Cost & Freight</option>
-                    <option value="EXW">EXW — Ex Works (Mine/Stockyard)</option>
-                    <option value="FOR">FOR — Free on Rail (Destination Siding)</option>
-                  </select>
-                </div>
+            <div className="text-center pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button
+                type="submit"
+                className="bg-[#FBD903] hover:bg-[#13223C] text-[#13223C] hover:text-white font-extrabold text-xs uppercase tracking-wider px-10 py-4 transition-all duration-300 shadow-md min-w-[200px]"
+              >
+                Send a message
+              </button>
+              <button
+                type="button"
+                onClick={handleWhatsAppContact}
+                className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white font-extrabold text-xs uppercase tracking-wider px-6 py-4 transition-all shadow-md"
+              >
+                <SiWhatsapp className="w-4 h-4" />
+                <span>Instant WhatsApp (+91 85919 38908)</span>
+              </button>
+            </div>
+          </form>
 
-                <div>
-                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
-                    Discharge Port / Gateway
-                  </label>
-                  <select
-                    value={rfqPort}
-                    onChange={(e) => setRfqPort(e.target.value)}
-                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
-                  >
-                    <option value="Visakhapatnam Port (INVTZ)">Visakhapatnam Port (INVTZ)</option>
-                    <option value="Gangavaram Port (INGGV)">Gangavaram Port (INGGV)</option>
-                    <option value="JNPT Mumbai / Nhava Sheva (INNSA)">JNPT Mumbai (INNSA)</option>
-                    <option value="Chennai Port (INMAA)">Chennai Port (INMAA)</option>
-                    <option value="Mundra Port, Gujarat (INMUN)">Mundra Port (INMUN)</option>
-                    <option value="Port of Singapore (SGSIN)">Port of Singapore (SGSIN)</option>
-                    <option value="Port of Jebel Ali, UAE (AEJEA)">Jebel Ali, UAE (AEJEA)</option>
-                    <option value="Direct Plant Rail Siding">Direct Plant Rail Siding</option>
-                  </select>
-                </div>
+          {/* Contact Coordinates / Direct Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 pt-12 border-t border-[#DFE3EA]">
+            <a
+              href="tel:+918591938908"
+              className="bg-[#EFF1F5] hover:bg-[#13223C] group p-6 text-center border border-[#DFE3EA] transition-all duration-300"
+            >
+              <div className="w-10 h-10 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-3 transition-colors">
+                <Phone className="w-4 h-4" />
               </div>
-
-              <div>
-                <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
-                  Chemical Assay & Specifications
-                </label>
-                <input
-                  type="text"
-                  value={rfqSpecs}
-                  onChange={(e) => setRfqSpecs(e.target.value)}
-                  placeholder="e.g. CaCO3 > 95%, Fe > 64%, Ash < 12%, Moisture tolerances..."
-                  className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
-                />
+              <div className="text-[11px] uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
+                Call Anytime
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    value={rfqName}
-                    onChange={(e) => setRfqName(e.target.value)}
-                    placeholder="e.g. Suresh Varma"
-                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
-                    Company Name
-                  </label>
-                  <input
-                    type="text"
-                    value={rfqCompany}
-                    onChange={(e) => setRfqCompany(e.target.value)}
-                    placeholder="e.g. Global Steels Ltd"
-                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-extrabold text-[#13223C] uppercase tracking-wider block mb-2">
-                    Official Email / Phone
-                  </label>
-                  <input
-                    type="text"
-                    value={rfqContact}
-                    onChange={(e) => setRfqContact(e.target.value)}
-                    placeholder="e.g. trade@company.com"
-                    className="w-full bg-white border border-[#DFE3EA] px-4 py-3 text-[#13223C] text-sm focus:outline-none focus:border-[#13223C]"
-                    required
-                  />
-                </div>
+              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white">
+                +91 85919 38908
               </div>
+            </a>
 
-              {rfqSubmitted && (
-                <div className="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-mono text-center">
-                  ✓ RFQ registered successfully. Our commercial trade desk will contact you within 24 hours.
-                </div>
-              )}
-
-              <div className="pt-4 flex flex-col sm:flex-row gap-4 items-center justify-between">
-                <button
-                  type="submit"
-                  className="w-full sm:w-auto bg-[#13223C] hover:bg-[#FBD903] text-white hover:text-[#13223C] font-extrabold text-xs uppercase tracking-wider px-8 py-4 transition-all duration-300 shadow-md"
-                >
-                  Submit Institutional RFQ
-                </button>
-                <button
-                  type="button"
-                  onClick={handleWhatsAppRfq}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white font-extrabold text-xs uppercase tracking-wider px-6 py-4 transition-all shadow-md"
-                >
-                  <SiWhatsapp className="w-4 h-4" />
-                  <span>Instant WhatsApp Quote (+91 85919 38908)</span>
-                </button>
+            <a
+              href="mailto:info@vasistatradingservices.com"
+              className="bg-[#EFF1F5] hover:bg-[#13223C] group p-6 text-center border border-[#DFE3EA] transition-all duration-300"
+            >
+              <div className="w-10 h-10 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-3 transition-colors">
+                <Mail className="w-4 h-4" />
               </div>
-            </form>
+              <div className="text-[11px] uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
+                Write Email
+              </div>
+              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white break-all">
+                info@vasistatradingservices.com
+              </div>
+            </a>
+
+            <div className="bg-[#EFF1F5] hover:bg-[#13223C] group p-6 text-center border border-[#DFE3EA] transition-all duration-300">
+              <div className="w-10 h-10 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-3 transition-colors">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <div className="text-[11px] uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
+                Office Locations
+              </div>
+              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white">
+                Vizianagaram & Navi Mumbai
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1371,7 +1252,6 @@ export default function Home() {
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    {/* Date Badge (Elementor Style) */}
                     <div className="absolute top-4 left-4 bg-[#13223C] text-white p-3 text-center min-w-[54px] shadow-md border-t-2 border-[#FBD903]">
                       <div className="font-heading text-xl font-extrabold leading-none">{item.date}</div>
                       <div className="text-[10px] uppercase font-bold text-[#FBD903] mt-0.5">{item.month}</div>
@@ -1392,13 +1272,13 @@ export default function Home() {
                 </div>
 
                 <div className="p-6 pt-0 border-t border-[#DFE3EA]/50 mt-4">
-                  <a
-                    href="#rfq"
+                  <button
+                    onClick={() => prefillInquiry(item.title)}
                     className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#13223C] group-hover:text-[#FC811B] uppercase tracking-wider transition-colors"
                   >
                     <span>Read More</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                  </button>
                 </div>
               </div>
             ))}
@@ -1406,87 +1286,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 12. CONTACT COORDINATES ───────────────────────────────────────── */}
-      <section id="contact" className="py-24 bg-white border-t border-[#DFE3EA]">
-        <div className="max-w-[1290px] mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-3 text-[#13223C] font-extrabold text-xs tracking-[0.25em] uppercase mb-3">
-              <span className="w-8 h-0.5 bg-[#FBD903]" />
-              <span>DIRECT DESK COORDINATES</span>
-              <span className="w-8 h-0.5 bg-[#FBD903]" />
-            </div>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#13223C] leading-tight">
-              Commercial Trade Desk
-            </h2>
-            <p className="text-[#76787C] text-sm mt-3">
-              Connect directly with our trading coordinators for allocation contracts, rake allotments, and port logistics.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <a
-              href="mailto:info@vasistatradingservices.com"
-              className="bg-[#EFF1F5] hover:bg-[#13223C] group p-8 text-center border border-[#DFE3EA] transition-all duration-300"
-            >
-              <div className="w-12 h-12 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-4 transition-colors">
-                <Mail className="w-5 h-5" />
-              </div>
-              <div className="text-xs uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
-                Official Email
-              </div>
-              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white break-all">
-                info@vasistatradingservices.com
-              </div>
-            </a>
-
-            <a
-              href="tel:+918591938908"
-              className="bg-[#EFF1F5] hover:bg-[#13223C] group p-8 text-center border border-[#DFE3EA] transition-all duration-300"
-            >
-              <div className="w-12 h-12 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-4 transition-colors">
-                <Phone className="w-5 h-5" />
-              </div>
-              <div className="text-xs uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
-                Desk Hotline
-              </div>
-              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white">
-                +91 85919 38908
-              </div>
-            </a>
-
-            <a
-              href="https://www.vasistatradingservices.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#EFF1F5] hover:bg-[#13223C] group p-8 text-center border border-[#DFE3EA] transition-all duration-300"
-            >
-              <div className="w-12 h-12 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-4 transition-colors">
-                <Globe className="w-5 h-5" />
-              </div>
-              <div className="text-xs uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
-                Official Portal
-              </div>
-              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white">
-                vasistatradingservices.com
-              </div>
-            </a>
-
-            <div className="bg-[#EFF1F5] hover:bg-[#13223C] group p-8 text-center border border-[#DFE3EA] transition-all duration-300">
-              <div className="w-12 h-12 bg-white group-hover:bg-[#FBD903] text-[#13223C] mx-auto flex items-center justify-center mb-4 transition-colors">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <div className="text-xs uppercase font-extrabold text-gray-500 group-hover:text-gray-300 tracking-wider mb-1">
-                Port Corridors
-              </div>
-              <div className="font-heading font-extrabold text-sm text-[#13223C] group-hover:text-white">
-                Mumbai & Andhra Ports, India
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 13. OFFICIAL FOOTER (Mirroring vasistaengineering.com) ────────── */}
+      {/* ── 12. OFFICIAL FOOTER (Mirroring vasistaengineering.com) ────────── */}
       <footer className="bg-[#101C30] text-gray-300 pt-20 pb-10 border-t border-white/10">
         <div className="max-w-[1290px] mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/10">
@@ -1527,10 +1327,9 @@ export default function Home() {
               <ul className="space-y-3 text-xs uppercase tracking-wider font-bold">
                 <li><a href="#" className="hover:text-[#FBD903] transition-colors">Home</a></li>
                 <li><a href="#about" className="hover:text-[#FBD903] transition-colors">About Us</a></li>
-                <li><a href="#services" className="hover:text-[#FBD903] transition-colors">Commodities & Services</a></li>
-                <li><a href="#tracking" className="hover:text-[#FBD903] transition-colors">Freight Tracking</a></li>
+                <li><a href="#services" className="hover:text-[#FBD903] transition-colors">Our Services</a></li>
                 <li><a href="#catalog" className="hover:text-[#FBD903] transition-colors">B2B Product Matrix</a></li>
-                <li><a href="#rfq" className="hover:text-[#FBD903] transition-colors">RFQ Desk</a></li>
+                <li><a href="#tracking" className="hover:text-[#FBD903] transition-colors">Freight Tracking</a></li>
                 <li><a href="#contact" className="hover:text-[#FBD903] transition-colors">Contact</a></li>
               </ul>
             </div>
